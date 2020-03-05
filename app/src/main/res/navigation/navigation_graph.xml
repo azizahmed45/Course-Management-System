@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment2"
+            app:destination="@id/signUpFragment2" />
+        <action
+            android:id="@+id/action_loginFragment_to_teacherDashboardFragment2"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/teacherDashboardFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment2"
+        android:name="com.mrgreenapps.coursemanagementsystem.SignUpFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment2_to_teacherDashboardFragment2"
+            app:popUpTo="@id/signUpFragment2"
+            app:popUpToInclusive="true"
+            app:destination="@id/teacherDashboardFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherDashboardFragment2"
+        android:name="com.mrgreenapps.coursemanagementsystem.TeacherDashboardFragment"
+        android:label="TeacherDashboardFragment" />
+</navigation>

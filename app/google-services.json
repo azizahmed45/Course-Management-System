@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "431589087732",
+    "firebase_url": "https://course-management-system-2361f.firebaseio.com",
+    "project_id": "course-management-system-2361f",
+    "storage_bucket": "course-management-system-2361f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431589087732:android:e6bc69d34e2050b04a81a1",
+        "android_client_info": {
+          "package_name": "com.mrgreenapps.coursemanagementsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431589087732-oe9n168qe5qlok6tp2cdbknpu9ginmne.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mrgreenapps.coursemanagementsystem",
+            "certificate_hash": "e24e08535148a87dcfa0266c4de160710f6acd56"
+          }
+        },
+        {
+          "client_id": "431589087732-gbr3lgk00lobjmge6ngu45nrv5jvsasc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVR17KTL14zb3jG83WdLuC_jEeLalnXhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431589087732-gbr3lgk00lobjmge6ngu45nrv5jvsasc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
