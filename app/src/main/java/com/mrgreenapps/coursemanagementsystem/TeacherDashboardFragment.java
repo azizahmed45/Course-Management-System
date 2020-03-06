@@ -13,11 +13,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.model.Course;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +36,13 @@ public class TeacherDashboardFragment extends Fragment {
 
     @BindView(R.id.add_course_button)
     Button addCourseButton;
+
+    @BindView(R.id.course_list)
+    RecyclerView courseListView;
+
+    private CourseListAdapter courseListAdapter;
+
+    private List<DocumentSnapshot> courseSnapshotList;
 
     @Nullable
     @Override
@@ -39,6 +56,24 @@ public class TeacherDashboardFragment extends Fragment {
                 showCourseCreateDialog();
             }
         });
+
+        courseSnapshotList = new ArrayList<>();
+
+        courseListAdapter = new CourseListAdapter(courseSnapshotList);
+
+        courseListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        courseListView.setAdapter(courseListAdapter);
+
+
+        DB.getCourseListQuery()
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots != null)
+                            courseListAdapter.setCourseSnapshotList(queryDocumentSnapshots.getDocuments());
+                    }
+                });
 
         return view;
     }
@@ -97,5 +132,7 @@ public class TeacherDashboardFragment extends Fragment {
                 }
             }
         });
+
+        dialog.show();
     }
 }

@@ -1,6 +1,7 @@
 package com.mrgreenapps.coursemanagementsystem;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignUpFragment extends Fragment {
+
+    private static final String TAG = "SignUpFragment";
 
     @BindView(R.id.email_field)
     EditText emailField;
@@ -119,6 +124,8 @@ public class SignUpFragment extends Fragment {
                                 }
                             });
 
+                        } else {
+                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
