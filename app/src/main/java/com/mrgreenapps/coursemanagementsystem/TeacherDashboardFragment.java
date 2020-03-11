@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,13 +66,26 @@ public class TeacherDashboardFragment extends Fragment {
 
         courseListView.setAdapter(courseListAdapter);
 
+        courseListAdapter.setOnItemClickListener(new CourseListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("course_id", courseSnapshotList.get(position).getId());
+                NavHostFragment.findNavController(TeacherDashboardFragment.this)
+                        .navigate(R.id.action_teacherDashboardFragment2_to_courseFragment, bundle);
+            }
+        });
+
 
         DB.getCourseListQuery()
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null)
-                            courseListAdapter.setCourseSnapshotList(queryDocumentSnapshots.getDocuments());
+                        if (queryDocumentSnapshots != null){
+                            courseSnapshotList = queryDocumentSnapshots.getDocuments();
+                            courseListAdapter.setCourseSnapshotList(courseSnapshotList);
+                        }
+
                     }
                 });
 

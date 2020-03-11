@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/class_id"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Class"/>
+
+    <item android:id="@+id/assignment"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Assignment"/>
+
+    <item android:id="@+id/exam"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Exam"/>
+
+    <item android:id="@+id/result"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Result"/>
+
+</menu>
