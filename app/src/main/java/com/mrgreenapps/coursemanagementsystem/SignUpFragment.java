@@ -112,15 +112,15 @@ public class SignUpFragment extends Fragment {
                             Toast.makeText(getContext(), "Signed Up Successfully.", Toast.LENGTH_SHORT).show();
                             UserInfo userInfo = new UserInfo();
                             userInfo.setType(accountTypeSpinner.getSelectedItem().toString());
+                            userInfo.setUid(authResult.getUser().getUid());
 
-                            DB.addUser(userInfo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            DB.addUser(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                                public void onSuccess(Void data) {
                                     if(userInfo.getType().equals(UserInfo.TYPE_TEACHER))
                                         navigateToTeacherDashboard();
                                     else if(userInfo.getType().equals(UserInfo.TYPE_STUDENT))
-//                                        navigateToStudentDashboard();
-                                        Toast.makeText(getContext(), "Student", Toast.LENGTH_SHORT).show();
+                                        navigateToStudentDashboard();
                                 }
                             });
 
@@ -140,5 +140,10 @@ public class SignUpFragment extends Fragment {
     private void navigateToTeacherDashboard() {
         NavHostFragment.findNavController(SignUpFragment.this)
                 .navigate(R.id.action_signUpFragment2_to_teacherDashboardFragment2);
+    }
+
+    private void navigateToStudentDashboard() {
+        NavHostFragment.findNavController(SignUpFragment.this)
+                .navigate(R.id.action_signUpFragment2_to_studentDashboardFragment);
     }
 }

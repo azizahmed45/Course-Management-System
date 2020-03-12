@@ -8,6 +8,8 @@ public class Course {
 
     private String code;
 
+    private String inviteCode;
+
     private String createdBy;
 
     private String details;
@@ -19,9 +21,10 @@ public class Course {
     public Course() {
     }
 
-    public Course(String name, String code, String createdBy, String details, Date startDate, Date endDate) {
+    public Course(String name, String code, String inviteCode, String createdBy, String details, Date startDate, Date endDate) {
         this.name = name;
         this.code = code;
+        this.inviteCode = inviteCode;
         this.createdBy = createdBy;
         this.details = details;
         this.startDate = startDate;
@@ -42,6 +45,14 @@ public class Course {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
     }
 
     public String getCreatedBy() {

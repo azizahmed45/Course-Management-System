@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,14 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
+import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,6 +37,11 @@ public class AttendanceFragment extends Fragment {
     @BindView(R.id.attendance_list)
     RecyclerView attendanceListView;
 
+    @BindView(R.id.submit_button)
+    Button submitButton;
+
+    AttendanceListAdapter attendanceListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,6 +50,8 @@ public class AttendanceFragment extends Fragment {
         courseId = getArguments().getString("course_id");
         classId = getArguments().getString("class_id");
 
+        attendanceListAdapter = new AttendanceListAdapter();
+        attendanceListView.setAdapter(attendanceListAdapter);
 
         DB.getCSRelationQuery(courseId)
                 .get()
@@ -53,26 +64,74 @@ public class AttendanceFragment extends Fragment {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                             csRelationList.add(documentSnapshot.toObject(CSRelation.class));
                         }
-                        Toast.makeText(getContext(), "" + queryDocumentSnapshots.size(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "" + queryDocumentSnapshots.size(), Toast.LENGTH_SHORT).show();
 
-                        DB.getStudentList(courseId, csRelationList)
-                                .addOnSuccessListener(new OnSuccessListener<List<QuerySnapshot>>() {
+                        DB.getClass(classId)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onSuccess(List<QuerySnapshot> querySnapshots) {
-                                        for (QuerySnapshot querySnapshot : querySnapshots) {
-                                            if (querySnapshot.getDocuments().size() > 0)
-                                                studentList.add(
-                                                        querySnapshot.getDocuments().get(0).toObject(UserInfo.class)
-                                                );
-                                        }
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        CourseClass courseClass = documentSnapshot.toObject(CourseClass.class);
 
-                                        attendanceListView.setAdapter(new AttendanceListAdapter(studentList));
+
+                                        DB.getStudentList(courseId, csRelationList)
+                                                .addOnSuccessListener(new OnSuccessListener<List<QuerySnapshot>>() {
+                                                    @Override
+                                                    public void onSuccess(List<QuerySnapshot> querySnapshots) {
+                                                        for (QuerySnapshot querySnapshot : querySnapshots) {
+                                                            if (querySnapshot.getDocuments().size() > 0)
+                                                                studentList.add(
+                                                                        querySnapshot.getDocuments().get(0).toObject(UserInfo.class)
+                                                                );
+                                                        }
+
+
+
+                                                        attendanceListAdapter.setList(
+                                                                studentList,
+                                                                courseClass != null ? courseClass.getAttendance() : new HashMap<>()
+
+                                                        );
+
+
+                                                    }
+                                                });
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getContext(), "Something went wrong." + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
 
                     }
                 });
+
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HashMap<String, Boolean> attendanceListMap = attendanceListAdapter.getAttendanceList();
+
+                DB.addAttendance(classId, attendanceListMap)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Something went wrong" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+            }
+        });
 
 
         return view;

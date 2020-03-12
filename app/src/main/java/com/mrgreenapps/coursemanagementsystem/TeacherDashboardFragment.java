@@ -1,7 +1,6 @@
 package com.mrgreenapps.coursemanagementsystem;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +80,7 @@ public class TeacherDashboardFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null){
+                        if (queryDocumentSnapshots != null) {
                             courseSnapshotList = queryDocumentSnapshots.getDocuments();
                             courseListAdapter.setCourseSnapshotList(courseSnapshotList);
                         }
@@ -127,6 +126,7 @@ public class TeacherDashboardFragment extends Fragment {
                     course.setName(courseNameField.getText().toString());
                     course.setCode(courseCodeField.getText().toString());
                     course.setDetails(courseDetailsField.getText().toString());
+                    course.setInviteCode(CalcUtils.generateRandomString(6));
 
                     DB.addCourse(course)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

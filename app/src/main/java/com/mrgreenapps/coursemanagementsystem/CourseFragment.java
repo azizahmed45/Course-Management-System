@@ -30,7 +30,7 @@ public class CourseFragment extends Fragment {
         String courseId = getArguments().getString("course_id");
 
         ClassListFragment classListFragment = new ClassListFragment(courseId);
-        AssignmentListFragment assignmentListFragment = new AssignmentListFragment(courseId);
+        TutorialListFragment tutorialListFragment = new TutorialListFragment(courseId);
         ExamListFragment examListFragment = new ExamListFragment(courseId);
         ResultFragment resultFragment = new ResultFragment(courseId);
 
@@ -44,7 +44,7 @@ public class CourseFragment extends Fragment {
                         openFragment(classListFragment);
                         return true;
                     case R.id.assignment:
-                        openFragment(assignmentListFragment);
+                        openFragment(tutorialListFragment);
                         return true;
                     case R.id.exam:
                         openFragment(examListFragment);

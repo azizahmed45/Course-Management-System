@@ -58,6 +58,12 @@ public class ClassListFragment extends Fragment {
 
         addClassButton.setText("Add Class");
 
+        addClassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addClass();
+            }
+        });
 
         classSnapshotList = new ArrayList<>();
 
@@ -95,7 +101,6 @@ public class ClassListFragment extends Fragment {
         return view;
     }
 
-    @OnClick(R.id.add_button)
     public void addClass(){
         DB.addClass(new CourseClass(courseId, new Date()))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -103,6 +108,7 @@ public class ClassListFragment extends Fragment {
                     public void onSuccess(DocumentReference documentReference) {
                         Bundle bundle = new Bundle();
                         bundle.putString("class_id", documentReference.getId());
+                        bundle.putString("course_id", courseId);
                         NavHostFragment.findNavController(ClassListFragment.this)
                                 .navigate(R.id.action_courseFragment_to_attendanceFragment2, bundle);
 

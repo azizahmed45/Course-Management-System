@@ -10,16 +10,14 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAdapter.AttendanceViewHolder> {
-    private List<UserInfo> studentList;
+    private List<UserInfo> studentList = new ArrayList<>();
     private HashMap<String, Boolean> attendanceListMap = new HashMap<>();
 
     @NonNull
@@ -35,7 +33,7 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
     public void onBindViewHolder(@NonNull AttendanceListAdapter.AttendanceViewHolder holder, int position) {
         UserInfo student = studentList.get(position);
 
-        if(student.getName() != null){
+        if (student.getName() != null) {
             holder.nameView.setText(student.getName());
         } else {
             holder.nameView.setText("No Name");
@@ -48,13 +46,28 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
             }
         });
 
+        if (attendanceListMap.get(student.getUid()) != null)
+            holder.attendanceButton.setChecked(attendanceListMap.get(student.getUid()));
+        else holder.attendanceButton.setChecked(false);
+
     }
 
-    public AttendanceListAdapter(List<UserInfo> studentList) {
+    public AttendanceListAdapter() {
+
+    }
+
+    public void setList(List<UserInfo> studentList, HashMap<String, Boolean> attendanceList) {
         this.studentList = studentList;
-        for(UserInfo userInfo: studentList){
-            attendanceListMap.put(userInfo.getUid(), false);
+        for (UserInfo userInfo : studentList) {
+            if (attendanceList != null && attendanceList.get(userInfo.getUid()) != null)
+                attendanceListMap.put(userInfo.getUid(), attendanceList.get(userInfo.getUid()));
+            else attendanceListMap.put(userInfo.getUid(), false);
         }
+        notifyDataSetChanged();
+    }
+
+    public HashMap<String, Boolean> getAttendanceList() {
+        return attendanceListMap;
     }
 
 

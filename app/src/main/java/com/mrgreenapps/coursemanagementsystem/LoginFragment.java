@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,8 +74,26 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         if (authResult.getUser() != null) {
-                            Toast.makeText(getContext(), "Logged in Successfully.", Toast.LENGTH_SHORT).show();
-                            navigateToTeacherDashboard();
+
+                            DB.getUser(authResult.getUser().getUid())
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
+                                            if (userInfo.getType().equals(UserInfo.TYPE_TEACHER)) {
+                                                navigateToTeacherDashboard();
+                                            } else if (userInfo.getType().equals(UserInfo.TYPE_STUDENT)) {
+                                                navigateToStudentDashboard();
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getContext(), "Login failed.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
                         }
                     }
                 })
@@ -87,7 +106,7 @@ public class LoginFragment extends Fragment {
     }
 
     @OnClick(R.id.sign_up_button)
-    public void signUp(){
+    public void signUp() {
         NavHostFragment.findNavController(LoginFragment.this)
                 .navigate(R.id.action_loginFragment_to_signUpFragment2);
     }
@@ -96,4 +115,10 @@ public class LoginFragment extends Fragment {
         NavHostFragment.findNavController(LoginFragment.this)
                 .navigate(R.id.action_loginFragment_to_teacherDashboardFragment2);
     }
+
+    private void navigateToStudentDashboard() {
+        NavHostFragment.findNavController(LoginFragment.this)
+                .navigate(R.id.action_loginFragment_to_studentDashboardFragment);
+    }
+
 }
