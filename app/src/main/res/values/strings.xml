@@ -4,4 +4,10 @@
         <item>Lecturer</item>
         <item>Student</item>
     </string-array>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 </resources>

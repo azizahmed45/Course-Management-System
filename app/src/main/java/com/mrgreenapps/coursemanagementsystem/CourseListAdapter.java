@@ -44,6 +44,10 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             holder.courseCodeView.setText(course.getCode());
         else holder.courseNameView.setText("No Code");
 
+        if (course.getInviteCode() != null)
+            holder.invitationCodeView.setText(course.getInviteCode());
+        else holder.invitationCodeView.setText("No Code");
+
     }
 
     public CourseListAdapter(List<DocumentSnapshot> membersSnapshot) {
@@ -69,12 +73,14 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         private TextView courseNameView;
         private TextView courseCodeView;
+        private TextView invitationCodeView;
 
         public CourseViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             courseNameView = itemView.findViewById(R.id.course_name);
             courseCodeView = itemView.findViewById(R.id.course_code);
+            invitationCodeView = itemView.findViewById(R.id.invitation);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

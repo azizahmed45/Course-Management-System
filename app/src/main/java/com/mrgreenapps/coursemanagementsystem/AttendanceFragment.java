@@ -10,12 +10,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
@@ -53,7 +51,7 @@ public class AttendanceFragment extends Fragment {
         attendanceListAdapter = new AttendanceListAdapter();
         attendanceListView.setAdapter(attendanceListAdapter);
 
-        DB.getCSRelationQuery(courseId)
+        DB.getCSRelationCourseQuery(courseId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

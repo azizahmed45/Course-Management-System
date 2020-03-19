@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAdapter.AttendanceViewHolder> {
     private List<UserInfo> studentList = new ArrayList<>();
-    private HashMap<String, Boolean> attendanceListMap = new HashMap<>();
+    private HashMap<String, Boolean> attendanceListMap = new HashMap<String, Boolean>();
 
     @NonNull
     @Override
@@ -37,6 +37,12 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
             holder.nameView.setText(student.getName());
         } else {
             holder.nameView.setText("No Name");
+        }
+
+        if (student.getRegId() != null) {
+            holder.idView.setText(student.getRegId());
+        } else {
+            holder.idView.setText("No Id");
         }
 
         holder.attendanceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

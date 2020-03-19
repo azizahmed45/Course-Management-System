@@ -2,6 +2,8 @@ package com.mrgreenapps.coursemanagementsystem;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import butterknife.BindView;
@@ -20,6 +23,8 @@ public class CourseFragment extends Fragment {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
+
+
 
     @Nullable
     @Override
@@ -33,6 +38,10 @@ public class CourseFragment extends Fragment {
         TutorialListFragment tutorialListFragment = new TutorialListFragment(courseId);
         ExamListFragment examListFragment = new ExamListFragment(courseId);
         ResultFragment resultFragment = new ResultFragment(courseId);
+        NoticeFragment noticeFragment = new NoticeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("course_id", courseId);
+        noticeFragment.setArguments(bundle);
 
         openFragment(classListFragment);
 
@@ -43,7 +52,7 @@ public class CourseFragment extends Fragment {
                     case R.id.class_id:
                         openFragment(classListFragment);
                         return true;
-                    case R.id.assignment:
+                    case R.id.tutorial:
                         openFragment(tutorialListFragment);
                         return true;
                     case R.id.exam:
@@ -51,6 +60,9 @@ public class CourseFragment extends Fragment {
                         return true;
                     case R.id.result:
                         openFragment(resultFragment);
+                        return true;
+                    case R.id.notice:
+                        openFragment(noticeFragment);
                         return true;
                 }
                 return false;
@@ -66,5 +78,6 @@ public class CourseFragment extends Fragment {
         transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
+
 
 }

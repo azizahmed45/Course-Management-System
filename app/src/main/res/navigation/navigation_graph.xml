@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/startFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -15,11 +15,11 @@
             app:exitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_loginFragment_to_teacherDashboardFragment2"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"
             app:destination="@id/teacherDashboardFragment2"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_studentDashboardFragment"
             app:destination="@id/studentDashboardFragment"
@@ -46,6 +46,9 @@
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_signUpFragment2_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/teacherDashboardFragment2"
@@ -56,6 +59,11 @@
             app:destination="@id/courseFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_teacherDashboardFragment2_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/courseFragment"
@@ -75,9 +83,47 @@
     <fragment
         android:id="@+id/studentDashboardFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.StudentDashboardFragment"
-        android:label="StudentDashboardFragment" />
+        android:label="StudentDashboardFragment" >
+        <action
+            android:id="@+id/action_studentDashboardFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_studentDashboardFragment_to_noticeFragment"
+            app:destination="@id/noticeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/tutorialFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.TutorialFragment"
         android:label="TutorialFragment" />
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_studentDashboardFragment"
+            app:destination="@id/studentDashboardFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_teacherDashboardFragment2"
+            app:destination="@id/teacherDashboardFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.ProfileEditFragment"
+        android:label="ProfileEditFragment" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_teacherDashboardFragment2"
+            app:destination="@id/teacherDashboardFragment2" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_studentDashboardFragment"
+            app:destination="@id/studentDashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.NoticeFragment"
+        android:label="NoticeFragment" />
 </navigation>

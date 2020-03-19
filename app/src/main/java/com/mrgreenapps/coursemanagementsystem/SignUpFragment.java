@@ -50,11 +50,13 @@ public class SignUpFragment extends Fragment {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
+
+
     @Override
     public void onStart() {
         super.onStart();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            navigateToTeacherDashboard();
+            navigateToProfileEdit();
         }
 
     }
@@ -118,9 +120,9 @@ public class SignUpFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void data) {
                                     if(userInfo.getType().equals(UserInfo.TYPE_TEACHER))
-                                        navigateToTeacherDashboard();
+                                        navigateToProfileEdit();
                                     else if(userInfo.getType().equals(UserInfo.TYPE_STUDENT))
-                                        navigateToStudentDashboard();
+                                        navigateToProfileEdit();
                                 }
                             });
 
@@ -137,13 +139,8 @@ public class SignUpFragment extends Fragment {
                 });
     }
 
-    private void navigateToTeacherDashboard() {
+    private void navigateToProfileEdit() {
         NavHostFragment.findNavController(SignUpFragment.this)
-                .navigate(R.id.action_signUpFragment2_to_teacherDashboardFragment2);
-    }
-
-    private void navigateToStudentDashboard() {
-        NavHostFragment.findNavController(SignUpFragment.this)
-                .navigate(R.id.action_signUpFragment2_to_studentDashboardFragment);
+                .navigate(R.id.action_signUpFragment2_to_profileEditFragment);
     }
 }

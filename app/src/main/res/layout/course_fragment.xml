@@ -4,9 +4,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:title="Course"
+        android:elevation="8dp"
+        app:titleTextColor="@color/white"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         android:layout_above="@+id/bottom_navigation"
         android:id="@+id/container"/>
 

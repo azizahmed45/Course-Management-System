@@ -11,6 +11,8 @@ public class UserInfo {
 
     private String uid;
 
+    private String regId;
+
     private String name;
 
     private String type;
@@ -24,13 +26,34 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String uid, String name, String type, String gender, String phoneNumber, String profileImageUrl) {
+    public UserInfo(String uid, String regId, String name, String type, String gender, String phoneNumber, String profileImageUrl) {
         this.uid = uid;
+        this.regId = regId;
         this.name = name;
         this.type = type;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public static String getTypeTeacher() {
+        return TYPE_TEACHER;
+    }
+
+    public static String getTypeStudent() {
+        return TYPE_STUDENT;
+    }
+
+    public static String getGenderMale() {
+        return GENDER_MALE;
+    }
+
+    public static String getGenderFemale() {
+        return GENDER_FEMALE;
+    }
+
+    public static String getGenderOther() {
+        return GENDER_OTHER;
     }
 
     public String getUid() {
@@ -39,6 +62,14 @@ public class UserInfo {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getRegId() {
+        return regId;
+    }
+
+    public void setRegId(String regId) {
+        this.regId = regId;
     }
 
     public String getName() {

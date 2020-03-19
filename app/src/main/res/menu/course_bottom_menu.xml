@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/class_id"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_class"
         android:title="Class"/>
 
-    <item android:id="@+id/assignment"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Assignment"/>
+    <item android:id="@+id/tutorial"
+        android:icon="@drawable/ic_tutorial"
+        android:title="Tutorial"/>
 
     <item android:id="@+id/exam"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_exam"
         android:title="Exam"/>
 
     <item android:id="@+id/result"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_result"
         android:title="Result"/>
 
+    <item android:id="@+id/notice"
+        android:icon="@drawable/ic_result"
+        android:title="Notice"/>
 </menu>

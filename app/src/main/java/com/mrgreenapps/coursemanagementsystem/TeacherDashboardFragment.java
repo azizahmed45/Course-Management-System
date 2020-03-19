@@ -3,10 +3,14 @@ package com.mrgreenapps.coursemanagementsystem;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -44,16 +50,31 @@ public class TeacherDashboardFragment extends Fragment {
 
     private List<DocumentSnapshot> courseSnapshotList;
 
+    @BindView(R.id.logout_button)
+    ImageButton logoutButton;
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.teacher_dashboard, container, false);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
 
         addCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCourseCreateDialog();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                NavHostFragment.findNavController(TeacherDashboardFragment.this)
+                        .navigate(R.id.action_teacherDashboardFragment2_to_loginFragment);
             }
         });
 
@@ -149,4 +170,7 @@ public class TeacherDashboardFragment extends Fragment {
 
         dialog.show();
     }
+
+
+
 }

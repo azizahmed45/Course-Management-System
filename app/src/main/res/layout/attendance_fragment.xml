@@ -6,8 +6,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:title="Attendance"
+        android:elevation="8dp"
+        app:titleTextColor="@color/white"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attendance_list"
+        android:layout_below="@+id/toolbar"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

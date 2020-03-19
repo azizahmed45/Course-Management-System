@@ -16,6 +16,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
+        android:background="@drawable/main_button_bg"
+        android:textColor="@color/white"
+        android:paddingHorizontal="10dp"
         tools:text="Add Any"/>
 
 </RelativeLayout>

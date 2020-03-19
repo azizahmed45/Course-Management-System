@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import butterknife.BindView;
@@ -33,12 +34,29 @@ public class LoginFragment extends Fragment {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-
     @Override
     public void onStart() {
         super.onStart();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            navigateToTeacherDashboard();
+
+            DB.getUser(FirebaseAuth.getInstance().getUid())
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
+                            if (userInfo.getType().equals(UserInfo.TYPE_TEACHER)) {
+                                navigateToTeacherDashboard();
+                            } else if (userInfo.getType().equals(UserInfo.TYPE_STUDENT)) {
+                                navigateToStudentDashboard();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), "Login failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
 
     }

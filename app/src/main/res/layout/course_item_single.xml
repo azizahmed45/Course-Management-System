@@ -3,18 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="12dp"
+    android:layout_marginTop="5dp"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorPrimary"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="10dp"
+        android:background="@drawable/main_edit_text_bg"
+        android:paddingVertical="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -32,13 +29,16 @@
             android:textSize="18sp"
             tools:text="Test name"/>
 
+        <TextView
+            android:id="@+id/invitation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            tools:text="GHVJHVJ"/>
+
     </LinearLayout>
 
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorAccent"/>
 
 </LinearLayout>

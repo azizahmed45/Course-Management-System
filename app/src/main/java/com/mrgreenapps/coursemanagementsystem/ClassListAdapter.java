@@ -43,6 +43,9 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
             holder.dateView.setText(dateFormat.format(lCourseClass.getDate()));
         else holder.dateView.setText("No Date");
 
+        holder.presentView.setText(String.valueOf(lCourseClass.getPresent()));
+        holder.absentView.setText(String.valueOf(lCourseClass.getAbsent()));
+
     }
 
     public ClassListAdapter(List<DocumentSnapshot> membersSnapshot) {
@@ -67,11 +70,15 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     public static class ClassViewHolder extends RecyclerView.ViewHolder {
 
         private TextView dateView;
+        private TextView presentView;
+        private TextView absentView;
 
         public ClassViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             dateView = itemView.findViewById(R.id.date);
+            presentView = itemView.findViewById(R.id.present);
+            absentView = itemView.findViewById(R.id.absent);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
