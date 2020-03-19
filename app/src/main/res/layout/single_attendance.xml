@@ -39,7 +39,7 @@
             android:id="@+id/attendance_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/attendance_state"
+            android:background="@drawable/true_false_state"
             android:textOn="Present"
             android:textOff="Absent"/>
 

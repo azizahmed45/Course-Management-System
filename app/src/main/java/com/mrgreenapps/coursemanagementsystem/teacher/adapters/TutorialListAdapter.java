@@ -1,15 +1,18 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
 
 import java.util.List;
@@ -38,9 +41,21 @@ public class TutorialListAdapter extends RecyclerView.Adapter<TutorialListAdapte
         Tutorial tutorial = tutorialSnapshotList.get(position).toObject(Tutorial.class);
 
 
-        if (tutorial != null)
+        if (tutorial != null && tutorial.getName() != null)
             holder.nameView.setText(tutorial.getName());
         else holder.nameView.setText("No Name");
+
+        if (tutorial != null){
+//            holder.publishButton.setOnCheckedChangeListener (null);
+            holder.publishButton.setChecked(!tutorial.isPublished());
+        }
+
+        holder.publishButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DB.publishTutorialMarks(tutorialSnapshotList.get(position).getId(), !isChecked);
+            }
+        });
 
     }
 
@@ -66,11 +81,13 @@ public class TutorialListAdapter extends RecyclerView.Adapter<TutorialListAdapte
     public static class TutorialViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nameView;
+        private ToggleButton publishButton;
 
         public TutorialViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             nameView = itemView.findViewById(R.id.name);
+            publishButton = itemView.findViewById(R.id.publish_button);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

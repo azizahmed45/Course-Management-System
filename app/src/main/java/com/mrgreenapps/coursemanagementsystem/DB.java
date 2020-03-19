@@ -74,10 +74,16 @@ public class DB {
                 .add(tutorial);
     }
 
-    public static Task<Void> addMarks(String tutorialId, HashMap<String, Double> marksList) {
+    public static Task<Void> addTutorialMarks(String tutorialId, HashMap<String, Double> marksList) {
         return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
                 .document(tutorialId)
                 .update("markList", marksList);
+    }
+
+    public static Task<Void> publishTutorialMarks(String tutorialId, boolean published) {
+        return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
+                .document(tutorialId)
+                .update("published", published);
     }
 
     public static Task<Void> updateProfile(String userId, String name, String gender, String phone, String id) {

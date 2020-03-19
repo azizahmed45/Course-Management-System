@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +17,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
-import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
+import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
+import com.mrgreenapps.coursemanagementsystem.teacher.adapters.AttendanceListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,30 +31,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TutorialFragment extends Fragment {
+public class AttendanceFragment extends Fragment {
 
     private String courseId;
-    private String tutorialId;
+    private String classId;
 
-    @BindView(R.id.marks_list)
-    RecyclerView marksListView;
+    @BindView(R.id.attendance_list)
+    RecyclerView attendanceListView;
 
     @BindView(R.id.submit_button)
     Button submitButton;
 
-    MarksListAdapter marksListAdapter;
+    AttendanceListAdapter attendanceListAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.exam_fragment, container, false);
+        View view = inflater.inflate(R.layout.attendance_fragment, container, false);
         ButterKnife.bind(this, view);
-
         courseId = getArguments().getString("course_id");
-        tutorialId = getArguments().getString("tutorial_id");
+        classId = getArguments().getString("class_id");
 
-        marksListAdapter = new MarksListAdapter();
-        marksListView.setAdapter(marksListAdapter);
+        attendanceListAdapter = new AttendanceListAdapter();
+        attendanceListView.setAdapter(attendanceListAdapter);
 
         DB.getCSRelationCourseQuery(courseId)
                 .get()
@@ -66,11 +68,11 @@ public class TutorialFragment extends Fragment {
                         }
 //                        Toast.makeText(getContext(), "" + queryDocumentSnapshots.size(), Toast.LENGTH_SHORT).show();
 
-                        DB.getTutorial(tutorialId)
+                        DB.getClass(classId)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        Tutorial tutorial = documentSnapshot.toObject(Tutorial.class);
+                                        CourseClass courseClass = documentSnapshot.toObject(CourseClass.class);
 
 
                                         DB.getStudentList(courseId, csRelationList)
@@ -86,9 +88,9 @@ public class TutorialFragment extends Fragment {
 
 
 
-                                                        marksListAdapter.setList(
+                                                        attendanceListAdapter.setList(
                                                                 studentList,
-                                                                tutorial != null ? tutorial.getMarkList() : new HashMap<>()
+                                                                courseClass != null ? courseClass.getAttendance() : new HashMap<>()
 
                                                         );
 
@@ -113,13 +115,13 @@ public class TutorialFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, Double> marksListMap = marksListAdapter.getMarksList();
+                HashMap<String, Boolean> attendanceListMap = attendanceListAdapter.getAttendanceList();
 
-                DB.addMarks(tutorialId, marksListMap)
+                DB.addAttendance(classId, attendanceListMap)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                NavHostFragment.findNavController(TutorialFragment.this).navigateUp();
+                                NavHostFragment.findNavController(AttendanceFragment.this).navigateUp();
 
                                 Toast.makeText(getContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
                             }

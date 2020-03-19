@@ -1,9 +1,7 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +11,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.mrgreenapps.coursemanagementsystem.NoticeFragment;
+import com.mrgreenapps.coursemanagementsystem.R;
+import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ClassListFragment;
+import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ExamListFragment;
+import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ResultFragment;
+import com.mrgreenapps.coursemanagementsystem.teacher.fragments.TutorialListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CourseFragment extends Fragment {
+public class TeacherCourseFragment extends Fragment {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;

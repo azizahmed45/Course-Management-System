@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.student.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +25,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
+import com.mrgreenapps.coursemanagementsystem.teacher.adapters.CourseListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.LoginFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.LoginFragment"
         android:label="LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment2"
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment2"
-        android:name="com.mrgreenapps.coursemanagementsystem.SignUpFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.SignUpFragment"
         android:label="SignUpFragment">
         <action
             android:id="@+id/action_signUpFragment2_to_teacherDashboardFragment2"
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/teacherDashboardFragment2"
-        android:name="com.mrgreenapps.coursemanagementsystem.TeacherDashboardFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.TeacherDashboardFragment"
         android:label="TeacherDashboardFragment">
         <action
             android:id="@+id/action_teacherDashboardFragment2_to_courseFragment"
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/courseFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.CourseFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.TeacherCourseFragment"
         android:label="CourseFragment">
         <action
             android:id="@+id/action_courseFragment_to_attendanceFragment2"
@@ -73,12 +73,12 @@
     </fragment>
     <fragment
         android:id="@+id/attendanceFragment2"
-        android:name="com.mrgreenapps.coursemanagementsystem.AttendanceFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.AttendanceFragment"
         android:label="AttendanceFragment" />
 
     <fragment
         android:id="@+id/studentDashboardFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.StudentDashboardFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.student.fragments.StudentDashboardFragment"
         android:label="StudentDashboardFragment">
         <action
             android:id="@+id/action_studentDashboardFragment_to_loginFragment"
@@ -92,11 +92,11 @@
     </fragment>
     <fragment
         android:id="@+id/tutorialFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.TutorialFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.TutorialFragment"
         android:label="TutorialFragment" />
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.StartFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.StartFragment"
         android:label="StartFragment">
         <action
             android:id="@+id/action_startFragment_to_loginFragment"
@@ -119,7 +119,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileEditFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.ProfileEditFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.ProfileEditFragment"
         android:label="ProfileEditFragment">
         <action
             android:id="@+id/action_profileEditFragment_to_teacherDashboardFragment2"

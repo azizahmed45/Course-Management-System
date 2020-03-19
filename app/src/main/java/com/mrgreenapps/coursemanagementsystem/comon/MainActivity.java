@@ -1,8 +1,10 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.comon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.mrgreenapps.coursemanagementsystem.R;
 
 public class MainActivity extends AppCompatActivity {
 

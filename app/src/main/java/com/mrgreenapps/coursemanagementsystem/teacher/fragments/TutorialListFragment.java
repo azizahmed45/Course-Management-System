@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -18,16 +18,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
+import com.mrgreenapps.coursemanagementsystem.teacher.adapters.TutorialListAdapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +50,7 @@ public class TutorialListFragment extends Fragment {
 
     private List<DocumentSnapshot> tutorialSnapshotList;
 
-    TutorialListFragment(String courseId){
+    TutorialListFragment(String courseId) {
         this.courseId = courseId;
     }
 
@@ -86,26 +89,40 @@ public class TutorialListFragment extends Fragment {
         });
 
         DB.getTutorialListQuery(courseId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null){
-                            tutorialSnapshotList = queryDocumentSnapshots.getDocuments();
-                            tutorialListAdapter.setTutorialSnapshotList(tutorialSnapshotList);
+                        if (queryDocumentSnapshots != null) {
+                            boolean addedORRemoved = false;
+                            for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+
+                                if (documentChange.getType().equals(DocumentChange.Type.ADDED)
+                                        || documentChange.getType().equals(DocumentChange.Type.REMOVED)
+                                ) {
+                                    addedORRemoved = true;
+                                    break;
+                                }
+                            }
+
+                            if (addedORRemoved) {
+                                tutorialSnapshotList = queryDocumentSnapshots.getDocuments();
+                                tutorialListAdapter.setTutorialSnapshotList(tutorialSnapshotList);
+
+                            }
                         }
 
                     }
                 });
 
 
-
         return view;
     }
 
-    public void addTutorial(){
+    public void addTutorial() {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.create_exam, null, false);
         EditText nameForm = view.findViewById(R.id.name);
+        EditText totalMarksForm = view.findViewById(R.id.total_marks);
         Button addButton = view.findViewById(R.id.add_tutorial_button);
 
         AlertDialog dialog = new AlertDialog.Builder(getContext())
@@ -116,13 +133,22 @@ public class TutorialListFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nameForm.getText().toString().isEmpty()){
+                if (nameForm.getText().toString().isEmpty()) {
                     nameForm.setError("Required");
                     nameForm.requestFocus();
                     return;
                 }
+                if (totalMarksForm.getText().toString().isEmpty()) {
+                    totalMarksForm.setError("Required");
+                    totalMarksForm.requestFocus();
+                    return;
+                }
 
-                DB.addTutorial(new Tutorial(courseId, nameForm.getText().toString()))
+                DB.addTutorial(new Tutorial(
+                        courseId,
+                        Double.parseDouble(totalMarksForm.getText().toString()),
+                        nameForm.getText().toString()
+                ))
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {

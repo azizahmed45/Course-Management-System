@@ -1,18 +1,17 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.text.DecimalFormat;
@@ -23,6 +22,7 @@ import java.util.List;
 public class MarksListAdapter extends RecyclerView.Adapter<MarksListAdapter.MarksViewHolder> {
     private List<UserInfo> studentList = new ArrayList<>();
     private HashMap<String, Double> marksListMap = new HashMap<String, Double>();
+    private double totalMark;
 
     @NonNull
     @Override
@@ -64,6 +64,10 @@ public class MarksListAdapter extends RecyclerView.Adapter<MarksListAdapter.Mark
             public void afterTextChanged(Editable s) {
                 if(!s.toString().isEmpty())
                     marksListMap.put(student.getUid(), Double.parseDouble(s.toString()));
+                if(!s.toString().isEmpty() && Double.parseDouble(s.toString()) > totalMark ){
+                    holder.markField.setText(String.valueOf(totalMark));
+                    holder.markField.setError("Mark should not greater then total mark");
+                }
             }
         });
 
@@ -88,6 +92,10 @@ public class MarksListAdapter extends RecyclerView.Adapter<MarksListAdapter.Mark
             else marksListMap.put(userInfo.getUid(), 0.00);
         }
         notifyDataSetChanged();
+    }
+
+    public void setTotalMark(double totalMark){
+        this.totalMark = totalMark;
     }
 
     public HashMap<String, Double> getMarksList() {

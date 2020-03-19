@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +17,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
-import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
+import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
+import com.mrgreenapps.coursemanagementsystem.teacher.adapters.MarksListAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,29 +31,30 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AttendanceFragment extends Fragment {
+public class TutorialFragment extends Fragment {
 
     private String courseId;
-    private String classId;
+    private String tutorialId;
 
-    @BindView(R.id.attendance_list)
-    RecyclerView attendanceListView;
+    @BindView(R.id.marks_list)
+    RecyclerView marksListView;
 
     @BindView(R.id.submit_button)
     Button submitButton;
 
-    AttendanceListAdapter attendanceListAdapter;
+    MarksListAdapter marksListAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.attendance_fragment, container, false);
+        View view = inflater.inflate(R.layout.exam_fragment, container, false);
         ButterKnife.bind(this, view);
-        courseId = getArguments().getString("course_id");
-        classId = getArguments().getString("class_id");
 
-        attendanceListAdapter = new AttendanceListAdapter();
-        attendanceListView.setAdapter(attendanceListAdapter);
+        courseId = getArguments().getString("course_id");
+        tutorialId = getArguments().getString("tutorial_id");
+
+        marksListAdapter = new MarksListAdapter();
+        marksListView.setAdapter(marksListAdapter);
 
         DB.getCSRelationCourseQuery(courseId)
                 .get()
@@ -66,11 +69,11 @@ public class AttendanceFragment extends Fragment {
                         }
 //                        Toast.makeText(getContext(), "" + queryDocumentSnapshots.size(), Toast.LENGTH_SHORT).show();
 
-                        DB.getClass(classId)
+                        DB.getTutorial(tutorialId)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        CourseClass courseClass = documentSnapshot.toObject(CourseClass.class);
+                                        Tutorial tutorial = documentSnapshot.toObject(Tutorial.class);
 
 
                                         DB.getStudentList(courseId, csRelationList)
@@ -85,10 +88,12 @@ public class AttendanceFragment extends Fragment {
                                                         }
 
 
+                                                        if (tutorial != null)
+                                                            marksListAdapter.setTotalMark(tutorial.getTotalMark());
 
-                                                        attendanceListAdapter.setList(
+                                                        marksListAdapter.setList(
                                                                 studentList,
-                                                                courseClass != null ? courseClass.getAttendance() : new HashMap<>()
+                                                                tutorial != null ? tutorial.getMarkList() : new HashMap<>()
 
                                                         );
 
@@ -113,13 +118,13 @@ public class AttendanceFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, Boolean> attendanceListMap = attendanceListAdapter.getAttendanceList();
+                HashMap<String, Double> marksListMap = marksListAdapter.getMarksList();
 
-                DB.addAttendance(classId, attendanceListMap)
+                DB.addTutorialMarks(tutorialId, marksListMap)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                NavHostFragment.findNavController(AttendanceFragment.this).navigateUp();
+                                NavHostFragment.findNavController(TutorialFragment.this).navigateUp();
 
                                 Toast.makeText(getContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
                             }

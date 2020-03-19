@@ -10,6 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"/>
+    <EditText
+        android:id="@+id/total_marks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Total marks"/>
 
     <Button
         android:id="@+id/add_tutorial_button"

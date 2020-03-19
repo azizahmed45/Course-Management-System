@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class Tutorial {
     private String courseId;
     private double totalMark;
+    private boolean published;
     private String name;
     private HashMap<String, Double> markList;
 
@@ -16,9 +17,16 @@ public class Tutorial {
         this.name = name;
     }
 
-    public Tutorial(String courseId, double totalMark, String name, HashMap<String, Double> markList) {
+    public Tutorial(String courseId, double totalMark, String name) {
         this.courseId = courseId;
         this.totalMark = totalMark;
+        this.name = name;
+    }
+
+    public Tutorial(String courseId, double totalMark, boolean published, String name, HashMap<String, Double> markList) {
+        this.courseId = courseId;
+        this.totalMark = totalMark;
+        this.published = published;
         this.name = name;
         this.markList = markList;
     }
@@ -37,6 +45,14 @@ public class Tutorial {
 
     public void setTotalMark(double totalMark) {
         this.totalMark = totalMark;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
     public String getName() {
