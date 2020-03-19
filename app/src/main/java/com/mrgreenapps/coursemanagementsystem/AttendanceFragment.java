@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -117,6 +119,8 @@ public class AttendanceFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                NavHostFragment.findNavController(AttendanceFragment.this).navigateUp();
+
                                 Toast.makeText(getContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
                             }
                         })

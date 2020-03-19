@@ -4,71 +4,66 @@
     android:id="@+id/navigation_graph"
     app:startDestination="@id/startFragment">
 
+
+    <!--    app:enterAnim="@anim/slide_in_right"-->
+    <!--    app:exitAnim="@anim/slide_out_left"-->
+    <!--    app:popEnterAnim="@anim/slide_in_right"-->
+    <!--    app:popExitAnim="@anim/slide_out_left"-->
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment2"
-            app:destination="@id/signUpFragment2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/signUpFragment2" />
         <action
             android:id="@+id/action_loginFragment_to_teacherDashboardFragment2"
             app:destination="@id/teacherDashboardFragment2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popUpTo="@id/loginFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_studentDashboardFragment"
             app:destination="@id/studentDashboardFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment2"
         android:name="com.mrgreenapps.coursemanagementsystem.SignUpFragment"
-        android:label="SignUpFragment" >
+        android:label="SignUpFragment">
         <action
             android:id="@+id/action_signUpFragment2_to_teacherDashboardFragment2"
-            app:popUpTo="@id/signUpFragment2"
-            app:popUpToInclusive="true"
             app:destination="@id/teacherDashboardFragment2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
-        <action
-            android:id="@+id/action_signUpFragment2_to_studentDashboardFragment"
-            app:destination="@id/studentDashboardFragment"
             app:popUpTo="@id/signUpFragment2"
-            app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_signUpFragment2_to_profileEditFragment"
-            app:destination="@id/profileEditFragment" />
+            app:destination="@id/profileEditFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/teacherDashboardFragment2"
         android:name="com.mrgreenapps.coursemanagementsystem.TeacherDashboardFragment"
-        android:label="TeacherDashboardFragment" >
+        android:label="TeacherDashboardFragment">
         <action
             android:id="@+id/action_teacherDashboardFragment2_to_courseFragment"
-            app:destination="@id/courseFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"/>
+            app:destination="@id/courseFragment" />
         <action
             android:id="@+id/action_teacherDashboardFragment2_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true"  />
     </fragment>
     <fragment
         android:id="@+id/courseFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.CourseFragment"
-        android:label="CourseFragment" >
+        android:label="CourseFragment">
         <action
             android:id="@+id/action_courseFragment_to_attendanceFragment2"
             app:destination="@id/attendanceFragment2" />
@@ -80,14 +75,16 @@
         android:id="@+id/attendanceFragment2"
         android:name="com.mrgreenapps.coursemanagementsystem.AttendanceFragment"
         android:label="AttendanceFragment" />
+
     <fragment
         android:id="@+id/studentDashboardFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.StudentDashboardFragment"
-        android:label="StudentDashboardFragment" >
+        android:label="StudentDashboardFragment">
         <action
             android:id="@+id/action_studentDashboardFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_studentDashboardFragment_to_noticeFragment"
@@ -100,30 +97,46 @@
     <fragment
         android:id="@+id/startFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.StartFragment"
-        android:label="StartFragment" >
+        android:label="StartFragment">
         <action
             android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_startFragment_to_studentDashboardFragment"
-            app:destination="@id/studentDashboardFragment" />
+            app:destination="@id/studentDashboardFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_startFragment_to_teacherDashboardFragment2"
-            app:destination="@id/teacherDashboardFragment2" />
+            app:destination="@id/teacherDashboardFragment2"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/profileEditFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.ProfileEditFragment"
-        android:label="ProfileEditFragment" >
+        android:label="ProfileEditFragment">
         <action
             android:id="@+id/action_profileEditFragment_to_teacherDashboardFragment2"
-            app:destination="@id/teacherDashboardFragment2" />
+            app:destination="@id/teacherDashboardFragment2"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_profileEditFragment_to_studentDashboardFragment"
-            app:destination="@id/studentDashboardFragment" />
+            app:destination="@id/studentDashboardFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/noticeFragment"
         android:name="com.mrgreenapps.coursemanagementsystem.NoticeFragment"
         android:label="NoticeFragment" />
+
 </navigation>

@@ -23,6 +23,8 @@ public class CourseFragment extends Fragment {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
+    
+    String courseId;
 
 
 
@@ -31,46 +33,42 @@ public class CourseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.course_fragment, container, false);
         ButterKnife.bind(this, view);
+        courseId = getArguments().getString("course_id");
 
-        String courseId = getArguments().getString("course_id");
-
-        ClassListFragment classListFragment = new ClassListFragment(courseId);
-        TutorialListFragment tutorialListFragment = new TutorialListFragment(courseId);
-        ExamListFragment examListFragment = new ExamListFragment(courseId);
-        ResultFragment resultFragment = new ResultFragment(courseId);
-        NoticeFragment noticeFragment = new NoticeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("course_id", courseId);
-        noticeFragment.setArguments(bundle);
-
-        openFragment(classListFragment);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.class_id:
-                        openFragment(classListFragment);
-                        return true;
-                    case R.id.tutorial:
-                        openFragment(tutorialListFragment);
-                        return true;
-                    case R.id.exam:
-                        openFragment(examListFragment);
-                        return true;
-                    case R.id.result:
-                        openFragment(resultFragment);
-                        return true;
-                    case R.id.notice:
-                        openFragment(noticeFragment);
-                        return true;
-                }
-                return false;
+                setItemFragment(item.getItemId());
+                return true;
             }
         });
 
-
         return view;
+    }
+
+    private void setItemFragment(int id){
+        switch (id) {
+            case R.id.class_id:
+                openFragment(new ClassListFragment(courseId));
+                break;
+            case R.id.tutorial:
+                openFragment(new TutorialListFragment(courseId));
+                break;
+            case R.id.exam:
+                openFragment(new ExamListFragment(courseId));
+                break;
+            case R.id.result:
+                openFragment(new ResultFragment(courseId));
+                break;
+            case R.id.notice:
+                NoticeFragment noticeFragment = new NoticeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("course_id", courseId);
+                noticeFragment.setArguments(bundle);
+                openFragment(noticeFragment);
+                break;
+        }
     }
 
     public void openFragment(Fragment fragment) {
@@ -79,5 +77,10 @@ public class CourseFragment extends Fragment {
         transaction.commit();
     }
 
+    @Override
+    public void onResume() {
+        setItemFragment(bottomNavigationView.getSelectedItemId());
+        super.onResume();
 
+    }
 }
