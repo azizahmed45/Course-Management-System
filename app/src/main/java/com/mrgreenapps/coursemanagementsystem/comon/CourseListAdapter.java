@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem.teacher.adapters;
+package com.mrgreenapps.coursemanagementsystem.comon;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Course;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     private List<DocumentSnapshot> courseSnapshotList;
 
     private OnItemClickListener listener;
+
+    private String userType;
 
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -28,7 +31,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     @Override
     public CourseListAdapter.CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item_single, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_course_item, parent, false);
 
         return new CourseViewHolder(view, listener);
     }
@@ -45,14 +48,15 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             holder.courseCodeView.setText(course.getCode());
         else holder.courseNameView.setText("No Code");
 
-        if (course.getInviteCode() != null)
+        if (course.getInviteCode() != null && userType.equals(UserInfo.TYPE_TEACHER))
             holder.invitationCodeView.setText(course.getInviteCode());
-        else holder.invitationCodeView.setText("No Code");
+        else holder.invitationCodeView.setVisibility(View.GONE);
 
     }
 
-    public CourseListAdapter(List<DocumentSnapshot> membersSnapshot) {
+    public CourseListAdapter(List<DocumentSnapshot> membersSnapshot, String userType) {
         this.courseSnapshotList = membersSnapshot;
+        this.userType = userType;
     }
 
 

@@ -2,7 +2,7 @@ package com.mrgreenapps.coursemanagementsystem.model;
 
 public class UserInfo {
 
-    public static final String TYPE_TEACHER = "Lecturer";
+    public static final String TYPE_TEACHER = "Teacher";
     public static final String TYPE_STUDENT = "Student";
 
     public static final String GENDER_MALE = "male";

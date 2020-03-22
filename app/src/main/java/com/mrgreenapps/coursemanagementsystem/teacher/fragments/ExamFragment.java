@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.DB;
 import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
-import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
+import com.mrgreenapps.coursemanagementsystem.model.Exam;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 import com.mrgreenapps.coursemanagementsystem.teacher.adapters.MarksListAdapter;
 
@@ -31,10 +31,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TutorialFragment extends Fragment {
+public class ExamFragment extends Fragment {
 
     private String courseId;
-    private String tutorialId;
+    private String examId;
+    private String userType;
+    private String examType;
 
     @BindView(R.id.marks_list)
     RecyclerView marksListView;
@@ -50,10 +52,14 @@ public class TutorialFragment extends Fragment {
         View view = inflater.inflate(R.layout.exam_fragment, container, false);
         ButterKnife.bind(this, view);
 
+        examType = getArguments().getString("exam_type");
         courseId = getArguments().getString("course_id");
-        tutorialId = getArguments().getString("tutorial_id");
+        examId = getArguments().getString("exam_id");
+        userType = getArguments().getString("user_type");
 
-        marksListAdapter = new MarksListAdapter();
+        if(userType.equals(UserInfo.TYPE_STUDENT)) submitButton.setVisibility(View.GONE);
+
+        marksListAdapter = new MarksListAdapter(userType);
         marksListView.setAdapter(marksListAdapter);
 
         DB.getCSRelationCourseQuery(courseId)
@@ -67,16 +73,15 @@ public class TutorialFragment extends Fragment {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                             csRelationList.add(documentSnapshot.toObject(CSRelation.class));
                         }
-//                        Toast.makeText(getContext(), "" + queryDocumentSnapshots.size(), Toast.LENGTH_SHORT).show();
 
-                        DB.getTutorial(tutorialId)
+                        DB.getExam(examType, examId)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        Tutorial tutorial = documentSnapshot.toObject(Tutorial.class);
+                                        Exam exam = documentSnapshot.toObject(Exam.class);
 
 
-                                        DB.getStudentList(courseId, csRelationList)
+                                        DB.getStudentList(csRelationList)
                                                 .addOnSuccessListener(new OnSuccessListener<List<QuerySnapshot>>() {
                                                     @Override
                                                     public void onSuccess(List<QuerySnapshot> querySnapshots) {
@@ -88,12 +93,12 @@ public class TutorialFragment extends Fragment {
                                                         }
 
 
-                                                        if (tutorial != null)
-                                                            marksListAdapter.setTotalMark(tutorial.getTotalMark());
+                                                        if (exam != null)
+                                                            marksListAdapter.setTotalMark(exam.getTotalMark());
 
                                                         marksListAdapter.setList(
                                                                 studentList,
-                                                                tutorial != null ? tutorial.getMarkList() : new HashMap<>()
+                                                                exam != null ? exam.getMarkList() : new HashMap<>()
 
                                                         );
 
@@ -118,13 +123,13 @@ public class TutorialFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, Double> marksListMap = marksListAdapter.getMarksList();
+                HashMap<String, Float> marksListMap = marksListAdapter.getMarksList();
 
-                DB.addTutorialMarks(tutorialId, marksListMap)
+                DB.addExamMarks(examType, examId, marksListMap)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                NavHostFragment.findNavController(TutorialFragment.this).navigateUp();
+                                NavHostFragment.findNavController(ExamFragment.this).navigateUp();
 
                                 Toast.makeText(getContext(), "Successfully updated.", Toast.LENGTH_SHORT).show();
                             }

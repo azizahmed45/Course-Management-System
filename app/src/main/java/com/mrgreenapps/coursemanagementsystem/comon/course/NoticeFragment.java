@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.comon.course;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,8 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrgreenapps.coursemanagementsystem.model.Course;
+import com.mrgreenapps.coursemanagementsystem.DB;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Notice;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +44,13 @@ public class NoticeFragment extends Fragment {
     RecyclerView noticeListView;
 
     private String courseId;
+    private String userType;
+
+    public NoticeFragment(String courseId, String userType) {
+        this.courseId = courseId;
+        this.userType = userType;
+    }
+
 
     private NoticeListAdapter noticeListAdapter;
 
@@ -52,16 +60,13 @@ public class NoticeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment_for_course, container, false);
+        View view = inflater.inflate(R.layout.global_list_for_course_fragmnet, container, false);
         ButterKnife.bind(this, view);
 
         addNoticeButton.setText("Add Notice");
 
-        if(getArguments() != null && getArguments().getString("course_id") != null)
-            courseId = getArguments().getString("course_id");
 
-        if(getArguments() != null && getArguments().getBoolean("isStudent")) addNoticeButton.setVisibility(View.GONE);
-
+        if (userType.equals(UserInfo.TYPE_STUDENT)) addNoticeButton.setVisibility(View.GONE);
 
 
         noticeSnapshotList = new ArrayList<>();
@@ -71,14 +76,13 @@ public class NoticeFragment extends Fragment {
         noticeListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         noticeListView.setAdapter(noticeListAdapter);
-        Toast.makeText(getContext(), ""+ courseId, Toast.LENGTH_SHORT).show();
 
 
         DB.getNoticeListQuery(courseId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (queryDocumentSnapshots != null){
+                        if (queryDocumentSnapshots != null) {
                             noticeSnapshotList = queryDocumentSnapshots.getDocuments();
                             noticeListAdapter.setNoticeSnapshotList(noticeSnapshotList);
                         }
@@ -87,12 +91,11 @@ public class NoticeFragment extends Fragment {
                 });
 
 
-
         return view;
     }
 
     @OnClick(R.id.add_button)
-    public void addNotice(){
+    public void addNotice() {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.create_notice, null, false);
         EditText titleField = view.findViewById(R.id.title_field);

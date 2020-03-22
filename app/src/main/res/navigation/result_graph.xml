@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/result_graph"
+    app:startDestination="@id/resultFragment">
+
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.course.ResultFragment"
+        android:label="ResultFragment">
+        <action
+            android:id="@+id/action_resultFragment_to_generateResultFragment"
+            app:destination="@id/generateResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/generateResultFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.GenerateResultFragment"
+        android:label="GenerateResultFragment" />
+</navigation>

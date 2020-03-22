@@ -21,6 +21,8 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
     private List<UserInfo> studentList = new ArrayList<>();
     private HashMap<String, Boolean> attendanceListMap = new HashMap<String, Boolean>();
 
+    private String userType;
+
     @NonNull
     @Override
     public AttendanceListAdapter.AttendanceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +48,8 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
             holder.idView.setText("No Id");
         }
 
+        if(userType.equals(UserInfo.TYPE_STUDENT)) holder.attendanceButton.setEnabled(false);
+
         holder.attendanceButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -59,8 +63,8 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
 
     }
 
-    public AttendanceListAdapter() {
-
+    public AttendanceListAdapter(String userType) {
+        this.userType = userType;
     }
 
     public void setList(List<UserInfo> studentList, HashMap<String, Boolean> attendanceList) {

@@ -35,6 +35,7 @@ public class AttendanceFragment extends Fragment {
 
     private String courseId;
     private String classId;
+    private String userType;
 
     @BindView(R.id.attendance_list)
     RecyclerView attendanceListView;
@@ -49,10 +50,14 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.attendance_fragment, container, false);
         ButterKnife.bind(this, view);
+
+        userType = getArguments().getString("user_type");
         courseId = getArguments().getString("course_id");
         classId = getArguments().getString("class_id");
 
-        attendanceListAdapter = new AttendanceListAdapter();
+        if(userType.equals(UserInfo.TYPE_STUDENT)) submitButton.setVisibility(View.GONE);
+
+        attendanceListAdapter = new AttendanceListAdapter(userType);
         attendanceListView.setAdapter(attendanceListAdapter);
 
         DB.getCSRelationCourseQuery(courseId)
@@ -75,7 +80,7 @@ public class AttendanceFragment extends Fragment {
                                         CourseClass courseClass = documentSnapshot.toObject(CourseClass.class);
 
 
-                                        DB.getStudentList(courseId, csRelationList)
+                                        DB.getStudentList(csRelationList)
                                                 .addOnSuccessListener(new OnSuccessListener<List<QuerySnapshot>>() {
                                                     @Override
                                                     public void onSuccess(List<QuerySnapshot> querySnapshots) {

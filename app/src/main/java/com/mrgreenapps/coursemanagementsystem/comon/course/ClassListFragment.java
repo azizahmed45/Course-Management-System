@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
+package com.mrgreenapps.coursemanagementsystem.comon.course;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.DB;
 import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 import com.mrgreenapps.coursemanagementsystem.teacher.adapters.ClassListAdapter;
 
 import java.util.ArrayList;
@@ -43,21 +44,25 @@ public class ClassListFragment extends Fragment {
 
     private String courseId;
 
+    private String userType;
+
     private ClassListAdapter classListAdapter;
 
     private List<DocumentSnapshot> classSnapshotList;
 
-    ClassListFragment(String courseId){
+    public ClassListFragment(String courseId, String userType){
         this.courseId = courseId;
+        this.userType = userType;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment_for_course, container, false);
+        View view = inflater.inflate(R.layout.global_list_for_course_fragmnet, container, false);
         ButterKnife.bind(this, view);
 
         addClassButton.setText("Add Class");
+        if(userType.equals(UserInfo.TYPE_STUDENT)) addClassButton.setVisibility(View.GONE);
 
         addClassButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +83,7 @@ public class ClassListFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Bundle bundle = new Bundle();
+                bundle.putString("user_type", userType);
                 bundle.putString("class_id", classSnapshotList.get(position).getId());
                 bundle.putString("course_id", courseId);
                 NavHostFragment.findNavController(ClassListFragment.this)
@@ -108,6 +114,7 @@ public class ClassListFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Bundle bundle = new Bundle();
+                        bundle.putString("user_type", userType);
                         bundle.putString("class_id", documentReference.getId());
                         bundle.putString("course_id", courseId);
                         NavHostFragment.findNavController(ClassListFragment.this)

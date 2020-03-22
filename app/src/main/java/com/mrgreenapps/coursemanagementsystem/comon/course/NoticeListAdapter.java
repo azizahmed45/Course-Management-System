@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem;
+package com.mrgreenapps.coursemanagementsystem.comon.course;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
+import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Notice;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +22,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.No
     @Override
     public NoticeListAdapter.NoticeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_notice, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_notice_item, parent, false);
 
         return new NoticeViewHolder(view);
     }

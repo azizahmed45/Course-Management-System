@@ -18,6 +18,10 @@ public class Course {
 
     private Date endDate;
 
+    private boolean resultGenerated;
+
+    private boolean resultPublished;
+
     public Course() {
     }
 
@@ -85,5 +89,21 @@ public class Course {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isResultGenerated() {
+        return resultGenerated;
+    }
+
+    public void setResultGenerated(boolean resultGenerated) {
+        this.resultGenerated = resultGenerated;
+    }
+
+    public boolean isResultPublished() {
+        return resultPublished;
+    }
+
+    public void setResultPublished(boolean resultPublished) {
+        this.resultPublished = resultPublished;
     }
 }

@@ -29,7 +29,8 @@ import com.mrgreenapps.coursemanagementsystem.CalcUtils;
 import com.mrgreenapps.coursemanagementsystem.DB;
 import com.mrgreenapps.coursemanagementsystem.R;
 import com.mrgreenapps.coursemanagementsystem.model.Course;
-import com.mrgreenapps.coursemanagementsystem.teacher.adapters.CourseListAdapter;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
+import com.mrgreenapps.coursemanagementsystem.comon.CourseListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class TeacherDashboardFragment extends Fragment {
 
         courseSnapshotList = new ArrayList<>();
 
-        courseListAdapter = new CourseListAdapter(courseSnapshotList);
+        courseListAdapter = new CourseListAdapter(courseSnapshotList, UserInfo.TYPE_TEACHER);
 
         courseListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -90,6 +91,7 @@ public class TeacherDashboardFragment extends Fragment {
             public void onItemClick(int position) {
                 Bundle bundle = new Bundle();
                 bundle.putString("course_id", courseSnapshotList.get(position).getId());
+                bundle.putString("user_type", UserInfo.TYPE_TEACHER);
                 NavHostFragment.findNavController(TeacherDashboardFragment.this)
                         .navigate(R.id.action_teacherDashboardFragment2_to_courseFragment, bundle);
             }

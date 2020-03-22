@@ -2,28 +2,32 @@ package com.mrgreenapps.coursemanagementsystem.model;
 
 import java.util.HashMap;
 
-public class Tutorial {
+public class Exam {
+
+    public static final String TYPE_TUTORIAL = "tutorial";
+    public static final String TYPE_EXAM = "exam";
+
     private String courseId;
-    private double totalMark;
+    private float totalMark;
     private boolean published;
     private String name;
-    private HashMap<String, Double> markList;
+    private HashMap<String, Float> markList;
 
-    public Tutorial() {
+    public Exam() {
     }
 
-    public Tutorial(String courseId, String name) {
+    public Exam(String courseId, String name) {
         this.courseId = courseId;
         this.name = name;
     }
 
-    public Tutorial(String courseId, double totalMark, String name) {
+    public Exam(String courseId, float totalMark, String name) {
         this.courseId = courseId;
         this.totalMark = totalMark;
         this.name = name;
     }
 
-    public Tutorial(String courseId, double totalMark, boolean published, String name, HashMap<String, Double> markList) {
+    public Exam(String courseId, float totalMark, boolean published, String name, HashMap<String, Float> markList) {
         this.courseId = courseId;
         this.totalMark = totalMark;
         this.published = published;
@@ -39,11 +43,11 @@ public class Tutorial {
         this.courseId = courseId;
     }
 
-    public double getTotalMark() {
+    public float getTotalMark() {
         return totalMark;
     }
 
-    public void setTotalMark(double totalMark) {
+    public void setTotalMark(float totalMark) {
         this.totalMark = totalMark;
     }
 
@@ -63,11 +67,11 @@ public class Tutorial {
         this.name = name;
     }
 
-    public HashMap<String, Double> getMarkList() {
+    public HashMap<String, Float> getMarkList() {
         return markList;
     }
 
-    public void setMarkList(HashMap<String, Double> markList) {
+    public void setMarkList(HashMap<String, Float> markList) {
         this.markList = markList;
     }
 }

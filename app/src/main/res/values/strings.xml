@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Course Management System</string>
     <string-array name="account_type">
-        <item>Lecturer</item>
+        <item>Teacher</item>
         <item>Student</item>
     </string-array>
 

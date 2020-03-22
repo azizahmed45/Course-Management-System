@@ -21,7 +21,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/single_mark"
+        tools:listitem="@layout/single_mark_item"
         android:layout_above="@id/submit_button"/>
 
     <Button

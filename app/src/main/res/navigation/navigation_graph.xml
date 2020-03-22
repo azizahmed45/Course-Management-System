@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/courseFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.TeacherCourseFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.comon.CourseFragment"
         android:label="CourseFragment">
         <action
             android:id="@+id/action_courseFragment_to_attendanceFragment2"
@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_courseFragment_to_tutorialFragment"
             app:destination="@id/tutorialFragment" />
+        <action
+            android:id="@+id/action_courseFragment_to_generateResultFragment2"
+            app:destination="@id/generateResultFragment2" />
     </fragment>
     <fragment
         android:id="@+id/attendanceFragment2"
@@ -87,12 +90,12 @@
             app:popUpTo="@id/navigation_graph"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_studentDashboardFragment_to_noticeFragment"
-            app:destination="@id/noticeFragment" />
+            android:id="@+id/action_studentDashboardFragment_to_courseFragment"
+            app:destination="@id/courseFragment" />
     </fragment>
     <fragment
         android:id="@+id/tutorialFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.TutorialFragment"
+        android:name="com.mrgreenapps.coursemanagementsystem.teacher.fragments.ExamFragment"
         android:label="TutorialFragment" />
     <fragment
         android:id="@+id/startFragment"
@@ -135,8 +138,8 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/noticeFragment"
-        android:name="com.mrgreenapps.coursemanagementsystem.NoticeFragment"
-        android:label="NoticeFragment" />
+        android:id="@+id/generateResultFragment2"
+        android:name="com.mrgreenapps.coursemanagementsystem.GenerateResultFragment"
+        android:label="GenerateResultFragment" />
 
 </navigation>

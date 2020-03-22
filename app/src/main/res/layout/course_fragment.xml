@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -30,6 +31,6 @@
         app:itemIconTint="@drawable/navigation_state_color"
         app:itemTextColor="@drawable/navigation_state_color"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/course_bottom_menu"/>
+        tools:menu="@menu/teacher_course_menu"/>
 
 </RelativeLayout>

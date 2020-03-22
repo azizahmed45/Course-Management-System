@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        tools:listitem="@layout/course_item_single" />
+        tools:listitem="@layout/single_course_item" />
 
     <Button
         android:id="@+id/add_course_button"

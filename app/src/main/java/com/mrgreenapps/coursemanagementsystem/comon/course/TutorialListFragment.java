@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
+package com.mrgreenapps.coursemanagementsystem.comon.course;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,9 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrgreenapps.coursemanagementsystem.DB;
 import com.mrgreenapps.coursemanagementsystem.R;
-import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
-import com.mrgreenapps.coursemanagementsystem.teacher.adapters.TutorialListAdapter;
+import com.mrgreenapps.coursemanagementsystem.model.Exam;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
+import com.mrgreenapps.coursemanagementsystem.teacher.adapters.ExamListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,28 +41,32 @@ import butterknife.ButterKnife;
 public class TutorialListFragment extends Fragment {
 
     private String courseId;
+    private String userType;
 
     @BindView(R.id.add_button)
     Button addTutorialButton;
 
     @BindView(R.id.list)
-    RecyclerView classListView;
+    RecyclerView tutorialListView;
 
-    private TutorialListAdapter tutorialListAdapter;
+    private ExamListAdapter tutorialListAdapter;
 
     private List<DocumentSnapshot> tutorialSnapshotList;
 
-    TutorialListFragment(String courseId) {
+    public TutorialListFragment(String courseId, String userType) {
         this.courseId = courseId;
+        this.userType = userType;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment_for_course, container, false);
+        View view = inflater.inflate(R.layout.global_list_for_course_fragmnet, container, false);
         ButterKnife.bind(this, view);
 
         addTutorialButton.setText("Add Tutorial");
+
+        if (userType.equals(UserInfo.TYPE_STUDENT)) addTutorialButton.setVisibility(View.GONE);
 
         addTutorialButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,22 +77,25 @@ public class TutorialListFragment extends Fragment {
 
         tutorialSnapshotList = new ArrayList<>();
 
-        tutorialListAdapter = new TutorialListAdapter(tutorialSnapshotList);
+        tutorialListAdapter = new ExamListAdapter(tutorialSnapshotList, userType, Exam.TYPE_TUTORIAL);
 
-        classListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        tutorialListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        classListView.setAdapter(tutorialListAdapter);
+        tutorialListView.setAdapter(tutorialListAdapter);
 
-        tutorialListAdapter.setOnItemClickListener(new TutorialListAdapter.OnItemClickListener() {
+        tutorialListAdapter.setOnItemClickListener(new ExamListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Bundle bundle = new Bundle();
-                bundle.putString("tutorial_id", tutorialSnapshotList.get(position).getId());
+                bundle.putString("exam_type", Exam.TYPE_TUTORIAL);
+                bundle.putString("exam_id", tutorialSnapshotList.get(position).getId());
                 bundle.putString("course_id", courseId);
+                bundle.putString("user_type", userType);
                 NavHostFragment.findNavController(TutorialListFragment.this)
                         .navigate(R.id.action_courseFragment_to_tutorialFragment, bundle);
             }
         });
+
 
         DB.getTutorialListQuery(courseId)
                 .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
@@ -105,8 +114,23 @@ public class TutorialListFragment extends Fragment {
                             }
 
                             if (addedORRemoved) {
-                                tutorialSnapshotList = queryDocumentSnapshots.getDocuments();
-                                tutorialListAdapter.setTutorialSnapshotList(tutorialSnapshotList);
+                                if (userType.equals(UserInfo.TYPE_TEACHER)) {
+                                    tutorialSnapshotList = queryDocumentSnapshots.getDocuments();
+                                    tutorialListAdapter.setExamSnapshotList(tutorialSnapshotList);
+                                } else if (userType.equals(UserInfo.TYPE_STUDENT)) {
+                                    List<DocumentSnapshot> publishedDocumentSnapshotList = new ArrayList<>();
+
+                                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
+                                        Exam tutorial = ds.toObject(Exam.class);
+
+                                        if (tutorial != null && tutorial.isPublished())
+                                            publishedDocumentSnapshotList.add(ds);
+                                    }
+
+                                    tutorialSnapshotList = publishedDocumentSnapshotList;
+                                    tutorialListAdapter.setExamSnapshotList(tutorialSnapshotList);
+                                }
+
 
                             }
                         }
@@ -121,9 +145,12 @@ public class TutorialListFragment extends Fragment {
     public void addTutorial() {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.create_exam, null, false);
+        TextView tutorialOrExam = view.findViewById(R.id.tutorial_or_exam);
+        tutorialOrExam.setText("Create Tutorial");
+
         EditText nameForm = view.findViewById(R.id.name);
         EditText totalMarksForm = view.findViewById(R.id.total_marks);
-        Button addButton = view.findViewById(R.id.add_tutorial_button);
+        Button addButton = view.findViewById(R.id.add_button);
 
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setView(view)
@@ -144,17 +171,19 @@ public class TutorialListFragment extends Fragment {
                     return;
                 }
 
-                DB.addTutorial(new Tutorial(
+                DB.addTutorial(new Exam(
                         courseId,
-                        Double.parseDouble(totalMarksForm.getText().toString()),
+                        Float.parseFloat(totalMarksForm.getText().toString()),
                         nameForm.getText().toString()
                 ))
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Bundle bundle = new Bundle();
-                                bundle.putString("tutorial_id", documentReference.getId());
+                                bundle.putString("exam_type", Exam.TYPE_TUTORIAL);
+                                bundle.putString("exam_id", documentReference.getId());
                                 bundle.putString("course_id", courseId);
+                                bundle.putString("user_type", userType);
                                 NavHostFragment.findNavController(TutorialListFragment.this)
                                         .navigate(R.id.action_courseFragment_to_tutorialFragment, bundle);
                                 dialog.cancel();

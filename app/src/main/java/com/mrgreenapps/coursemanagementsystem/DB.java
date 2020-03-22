@@ -13,7 +13,8 @@ import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
 import com.mrgreenapps.coursemanagementsystem.model.Course;
 import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
 import com.mrgreenapps.coursemanagementsystem.model.Notice;
-import com.mrgreenapps.coursemanagementsystem.model.Tutorial;
+import com.mrgreenapps.coursemanagementsystem.model.Exam;
+import com.mrgreenapps.coursemanagementsystem.model.Result;
 import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class DB {
     public static final String COLLECTION_CLASS = "classes";
     public static final String COLLECTION_NOTICE = "notices";
     public static final String COLLECTION_TUTORIAL = "tutorial";
+    public static final String COLLECTION_EXAM = "exams";
+    public static final String COLLECTION_RESULT = "results";
     public static final String COLLECTION_COURSE_STUDENT_RELATION = "course_student_relation";
 
     public static Task<Void> addUser(UserInfo userInfo) {
@@ -69,20 +72,35 @@ public class DB {
                 .add(courseClass);
     }
 
-    public static Task<DocumentReference> addTutorial(Tutorial tutorial) {
+    public static Task<DocumentReference> addTutorial(Exam exam) {
         return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
-                .add(tutorial);
-    }
-
-    public static Task<Void> addTutorialMarks(String tutorialId, HashMap<String, Double> marksList) {
-        return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
-                .document(tutorialId)
-                .update("markList", marksList);
+                .add(exam);
     }
 
     public static Task<Void> publishTutorialMarks(String tutorialId, boolean published) {
         return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
                 .document(tutorialId)
+                .update("published", published);
+    }
+
+    public static Task<DocumentReference> addExam(Exam exam) {
+        return FirebaseFirestore.getInstance().collection(COLLECTION_EXAM)
+                .add(exam);
+    }
+
+    public static Task<Void> addExamMarks(String examType, String examId, HashMap<String, Float> marksList) {
+        String collection = "";
+        if (examType.equals(Exam.TYPE_TUTORIAL)) collection = COLLECTION_TUTORIAL;
+        else if (examType.equals(Exam.TYPE_EXAM)) collection = COLLECTION_EXAM;
+
+        return FirebaseFirestore.getInstance().collection(collection)
+                .document(examId)
+                .update("markList", marksList);
+    }
+
+    public static Task<Void> publishExamMarks(String examId, boolean published) {
+        return FirebaseFirestore.getInstance().collection(COLLECTION_EXAM)
+                .document(examId)
                 .update("published", published);
     }
 
@@ -120,8 +138,8 @@ public class DB {
     public static Task<Void> addAttendance(String classId, HashMap<String, Boolean> attendanceList) {
 
         int presentCount = 0, absentCount = 0;
-        for(Boolean present: attendanceList.values()){
-            if(present) presentCount++;
+        for (Boolean present : attendanceList.values()) {
+            if (present) presentCount++;
             else absentCount++;
         }
 
@@ -154,9 +172,13 @@ public class DB {
                 .get();
     }
 
-    public static Task<DocumentSnapshot> getTutorial(String tutorialId) {
-        return FirebaseFirestore.getInstance().collection(COLLECTION_TUTORIAL)
-                .document(tutorialId)
+    public static Task<DocumentSnapshot> getExam(String examType, String examId) {
+        String collection = "";
+        if (examType.equals(Exam.TYPE_TUTORIAL)) collection = COLLECTION_TUTORIAL;
+        else if (examType.equals(Exam.TYPE_EXAM)) collection = COLLECTION_EXAM;
+
+        return FirebaseFirestore.getInstance().collection(collection)
+                .document(examId)
                 .get();
     }
 
@@ -188,6 +210,12 @@ public class DB {
                 .whereEqualTo("courseId", courseId);
     }
 
+    public static Query getExamListQuery(String courseId) {
+        return FirebaseFirestore.getInstance().collection(COLLECTION_EXAM)
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereEqualTo("courseId", courseId);
+    }
+
     public static Query getCSRelationCourseQuery(String courseId) {
         return FirebaseFirestore.getInstance().collection(COLLECTION_COURSE_STUDENT_RELATION)
                 .whereEqualTo("courseId", courseId);
@@ -205,7 +233,7 @@ public class DB {
     }
 
 
-    public static Task<List<QuerySnapshot>> getStudentList(String courseId, List<CSRelation> csRelationList) {
+    public static Task<List<QuerySnapshot>> getStudentList(List<CSRelation> csRelationList) {
 
         List<Task<QuerySnapshot>> queryList = new ArrayList<>();
 
@@ -218,6 +246,32 @@ public class DB {
         }
 
         return Tasks.whenAllSuccess(queryList);
+    }
+
+    public static Task<Void> addResult(String courseId, Result result) {
+        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+        batch.update(
+                FirebaseFirestore.getInstance().collection(COLLECTION_COURSES).document(courseId),
+                "resultGenerated",
+                true
+        );
+
+        batch.set(
+                FirebaseFirestore.getInstance().collection(COLLECTION_COURSES)
+                        .document(courseId).collection(COLLECTION_RESULT)
+                        .document(COLLECTION_RESULT),
+                result
+        );
+
+        return batch.commit();
+    }
+
+    public static Task<DocumentSnapshot> getResult(String courseId) {
+
+        return FirebaseFirestore.getInstance().collection(COLLECTION_COURSES)
+                .document(courseId).collection(COLLECTION_RESULT)
+                .document(COLLECTION_RESULT)
+                .get();
     }
 
 }

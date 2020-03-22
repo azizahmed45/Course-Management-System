@@ -1,4 +1,4 @@
-package com.mrgreenapps.coursemanagementsystem.teacher.fragments;
+package com.mrgreenapps.coursemanagementsystem.comon;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,23 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mrgreenapps.coursemanagementsystem.NoticeFragment;
+import com.mrgreenapps.coursemanagementsystem.GenerateResultFragment;
+import com.mrgreenapps.coursemanagementsystem.comon.course.ClassListFragment;
+import com.mrgreenapps.coursemanagementsystem.comon.course.ExamListFragment;
+import com.mrgreenapps.coursemanagementsystem.comon.course.NoticeFragment;
 import com.mrgreenapps.coursemanagementsystem.R;
-import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ClassListFragment;
-import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ExamListFragment;
-import com.mrgreenapps.coursemanagementsystem.teacher.fragments.ResultFragment;
-import com.mrgreenapps.coursemanagementsystem.teacher.fragments.TutorialListFragment;
+import com.mrgreenapps.coursemanagementsystem.comon.course.ResultFragment;
+import com.mrgreenapps.coursemanagementsystem.comon.course.TutorialListFragment;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TeacherCourseFragment extends Fragment {
+public class CourseFragment extends Fragment {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
-    
-    String courseId;
 
+    private String courseId;
+    private String userType;
 
 
     @Nullable
@@ -37,6 +39,13 @@ public class TeacherCourseFragment extends Fragment {
         View view = inflater.inflate(R.layout.course_fragment, container, false);
         ButterKnife.bind(this, view);
         courseId = getArguments().getString("course_id");
+        userType = getArguments().getString("user_type");
+
+        if (userType.equals(UserInfo.TYPE_TEACHER)) {
+            bottomNavigationView.inflateMenu(R.menu.teacher_course_menu);
+        } else if (userType.equals(UserInfo.TYPE_STUDENT)) {
+            bottomNavigationView.inflateMenu(R.menu.student_course_menu);
+        }
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,26 +59,23 @@ public class TeacherCourseFragment extends Fragment {
         return view;
     }
 
-    private void setItemFragment(int id){
+    private void setItemFragment(int id) {
         switch (id) {
             case R.id.class_id:
-                openFragment(new ClassListFragment(courseId));
+                openFragment(new ClassListFragment(courseId, userType));
                 break;
             case R.id.tutorial:
-                openFragment(new TutorialListFragment(courseId));
+                openFragment(new TutorialListFragment(courseId, userType));
                 break;
             case R.id.exam:
-                openFragment(new ExamListFragment(courseId));
+                openFragment(new ExamListFragment(courseId, userType));
                 break;
             case R.id.result:
-                openFragment(new ResultFragment(courseId));
+                openFragment(new ResultFragment(courseId, userType));
+//                openFragment(new GenerateResultFragment(courseId, userType));
                 break;
             case R.id.notice:
-                NoticeFragment noticeFragment = new NoticeFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("course_id", courseId);
-                noticeFragment.setArguments(bundle);
-                openFragment(noticeFragment);
+                openFragment(new NoticeFragment(courseId, userType));
                 break;
         }
     }
