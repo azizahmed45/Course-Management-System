@@ -45,7 +45,7 @@ dependencies {
     //material
     implementation 'com.google.android.material:material:1.2.0-alpha05'
 
-    //data table
-    implementation 'com.github.salehyarahmadi:DataTable:v1.0.0'
+    //table view
+    implementation 'com.evrencoskun.library:tableview:0.8.9'
 
 }
