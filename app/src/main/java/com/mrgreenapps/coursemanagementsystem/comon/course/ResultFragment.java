@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.mrgreenapps.coursemanagementsystem.TableAdapter;
 import com.mrgreenapps.coursemanagementsystem.model.Course;
 import com.mrgreenapps.coursemanagementsystem.model.Exam;
 import com.mrgreenapps.coursemanagementsystem.model.Result;
+import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -47,6 +49,12 @@ public class ResultFragment extends Fragment {
 
     @BindView(R.id.not_generated_area)
     LinearLayout notGeneratedArea;
+
+    @BindView(R.id.not_published_area)
+    LinearLayout notPublishedArea;
+
+    @BindView(R.id.result_area)
+    LinearLayout resultArea;
 
     @BindView(R.id.tableView)
     TableView tableView;
@@ -84,13 +92,35 @@ public class ResultFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Course course = documentSnapshot.toObject(Course.class);
 
+                        if(course != null){
 
-                        if (course != null && course.isResultGenerated()) {
-                            notGeneratedArea.setVisibility(View.GONE);
-                            showResultData();
-                        } else {
-                            notGeneratedArea.setVisibility(View.VISIBLE);
+
+                            if(userType.equals(UserInfo.TYPE_TEACHER)){
+                                if(course.isResultGenerated()){
+                                    resultArea.setVisibility(View.VISIBLE);
+                                    notGeneratedArea.setVisibility(View.GONE);
+                                    notPublishedArea.setVisibility(View.GONE);
+                                    showResultData();
+                                } else {
+                                    resultArea.setVisibility(View.GONE);
+                                    notGeneratedArea.setVisibility(View.VISIBLE);
+                                    notPublishedArea.setVisibility(View.GONE);
+                                }
+                            } else if(userType.equals(UserInfo.TYPE_STUDENT)){
+                                if(course.isResultPublished()){
+                                    resultArea.setVisibility(View.VISIBLE);
+                                    notGeneratedArea.setVisibility(View.GONE);
+                                    notPublishedArea.setVisibility(View.GONE);
+                                    showResultData();
+                                } else {
+                                    resultArea.setVisibility(View.GONE);
+                                    notGeneratedArea.setVisibility(View.GONE);
+                                    notPublishedArea.setVisibility(View.VISIBLE);
+                                }
+                            }
+
                         }
+
                     }
                 });
 

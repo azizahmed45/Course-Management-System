@@ -5,8 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,10 +49,30 @@ public class GenerateResultFragment extends Fragment {
     @BindView(R.id.generate_button)
     Button generateButton;
 
+    @BindView(R.id.grade_list)
+    RecyclerView gradeListView;
+
+    @BindView(R.id.grade_option)
+    Spinner gradeOptionSpinner;
+
+    @BindView(R.id.add_grade_area)
+    LinearLayout addGradeArea;
+
+    @BindView(R.id.add_button)
+    Button addGradeButton;
+
+    @BindView(R.id.grade_letter_field)
+    EditText gradeLetterField;
+
+    @BindView(R.id.lower_bound_field)
+    EditText lowerBoundField;
+
 
     List<MarkingFactor> markingFactorList;
 
     MarkingFactorAdapter markingFactorAdapter;
+
+    GradeOptionListAdapter gradeOptionListAdapter;
 
     String courseId;
 
@@ -70,6 +94,10 @@ public class GenerateResultFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         courseId = getArguments().getString("course_id");
+
+        gradeOptionListAdapter = new GradeOptionListAdapter(getContext());
+        gradeListView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        gradeListView.setAdapter(gradeOptionListAdapter);
 
         markingFactorList = new ArrayList<>();
         markingFactorAdapter = new MarkingFactorAdapter();
@@ -104,6 +132,62 @@ public class GenerateResultFragment extends Fragment {
                         Toast.makeText(getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+        gradeOptionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    gradeOptionListAdapter.setDefaultGradeList();
+                    addGradeArea.setVisibility(View.GONE);
+                } else if (position == 1) {
+                    gradeOptionListAdapter.setCustomGradeList();
+                    addGradeArea.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        addGradeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(gradeLetterField.getText().toString().isEmpty()){
+                    gradeLetterField.setError("Required");
+                    gradeLetterField.requestFocus();
+                    return;
+                }
+
+                if(lowerBoundField.getText().toString().isEmpty()){
+                    lowerBoundField.setError("Required");
+                    lowerBoundField.requestFocus();
+                    return;
+                }
+
+                String gradeLetter = gradeLetterField.getText().toString();
+                String lowerBound = lowerBoundField.getText().toString();
+
+                if(gradeOptionListAdapter.getGradeLetters().contains(gradeLetter)){
+                    Toast.makeText(getContext(), "Grade letter already added", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(gradeOptionListAdapter.getGradeLowerBounds().contains(lowerBound)){
+                    Toast.makeText(getContext(), "Lower bound needs to be different.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                gradeOptionListAdapter.addCustomGrade(gradeLetter, lowerBound);
+
+                gradeLetterField.setText("");
+                lowerBoundField.setText("");
+
+
+            }
+        });
 
 
         generateButton.setOnClickListener(new View.OnClickListener() {

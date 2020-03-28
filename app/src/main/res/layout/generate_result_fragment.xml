@@ -2,14 +2,89 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/generate_button"/>
+        android:layout_above="@id/generate_button">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/single_marking_factor_item"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Grading System:"/>
+
+        <Spinner
+            android:id="@+id/grade_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_edit_text_bg"
+            android:layout_marginVertical="4dp"
+            android:padding="10dp"
+            android:entries="@array/grade_option"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/grade_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/single_marking_factor_item"/>
+
+
+        <LinearLayout
+            android:id="@+id/add_grade_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/grade_letter_field"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/main_edit_text_bg"
+                android:layout_marginVertical="4dp"
+                android:padding="10dp"
+                android:hint="Grade"/>
+
+            <EditText
+                android:id="@+id/lower_bound_field"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/main_edit_text_bg"
+                android:layout_marginVertical="4dp"
+                android:padding="10dp"
+                android:inputType="numberDecimal"
+                android:hint="Lower Bound"/>
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/main_button_bg"
+                android:textColor="@color/white"
+                android:text="Add"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
     <Button
