@@ -9,6 +9,7 @@ public class Result {
     private HashMap<String, Float> attendanceMark;
     private HashMap<String, Float> tutorialMark;
     private HashMap<String, HashMap<String, Float>> examMarkList;
+    private HashMap<String, String> gradeList;
 
     public Result() {
     }
@@ -68,5 +69,13 @@ public class Result {
 
     public void setExamMarkList(HashMap<String, HashMap<String, Float>> examMarkList) {
         this.examMarkList = examMarkList;
+    }
+
+    public HashMap<String, String> getGradeList() {
+        return gradeList;
+    }
+
+    public void setGradeList(HashMap<String, String> gradeList) {
+        this.gradeList = gradeList;
     }
 }

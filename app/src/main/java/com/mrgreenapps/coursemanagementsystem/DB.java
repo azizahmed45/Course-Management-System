@@ -83,6 +83,12 @@ public class DB {
                 .update("published", published);
     }
 
+    public static Task<Void> publishResult(String courseId, boolean published) {
+        return FirebaseFirestore.getInstance().collection(COLLECTION_COURSES)
+                .document(courseId)
+                .update("resultPublished", published);
+    }
+
     public static Task<DocumentReference> addExam(Exam exam) {
         return FirebaseFirestore.getInstance().collection(COLLECTION_EXAM)
                 .add(exam);

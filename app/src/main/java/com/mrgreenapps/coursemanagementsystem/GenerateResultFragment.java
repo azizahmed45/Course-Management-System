@@ -1,7 +1,6 @@
 package com.mrgreenapps.coursemanagementsystem;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +23,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.protobuf.Internal;
 import com.mrgreenapps.coursemanagementsystem.model.CSRelation;
 import com.mrgreenapps.coursemanagementsystem.model.CourseClass;
 import com.mrgreenapps.coursemanagementsystem.model.Exam;
@@ -155,13 +151,13 @@ public class GenerateResultFragment extends Fragment {
         addGradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gradeLetterField.getText().toString().isEmpty()){
+                if (gradeLetterField.getText().toString().isEmpty()) {
                     gradeLetterField.setError("Required");
                     gradeLetterField.requestFocus();
                     return;
                 }
 
-                if(lowerBoundField.getText().toString().isEmpty()){
+                if (lowerBoundField.getText().toString().isEmpty()) {
                     lowerBoundField.setError("Required");
                     lowerBoundField.requestFocus();
                     return;
@@ -170,12 +166,12 @@ public class GenerateResultFragment extends Fragment {
                 String gradeLetter = gradeLetterField.getText().toString();
                 String lowerBound = lowerBoundField.getText().toString();
 
-                if(gradeOptionListAdapter.getGradeLetters().contains(gradeLetter)){
+                if (gradeOptionListAdapter.getGradeLetters().contains(gradeLetter)) {
                     Toast.makeText(getContext(), "Grade letter already added", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(gradeOptionListAdapter.getGradeLowerBounds().contains(lowerBound)){
+                if (gradeOptionListAdapter.getGradeLowerBounds().contains(lowerBound)) {
                     Toast.makeText(getContext(), "Lower bound needs to be different.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -200,6 +196,8 @@ public class GenerateResultFragment extends Fragment {
 
                 if (total != 100) {
                     Toast.makeText(getContext(), "Total percentage should be 100", Toast.LENGTH_SHORT).show();
+                } else if (gradeOptionListAdapter.getGradeHashMap().size() == 0) {
+                    Toast.makeText(getContext(), "Please add grades.", Toast.LENGTH_SHORT).show();
                 } else {
                     getMarks(markingFactorAdapter.getMarkingFactorList());
                 }
@@ -359,6 +357,8 @@ public class GenerateResultFragment extends Fragment {
                     mTutorialMark,
                     mExamMarkList
             );
+
+            result.setGradeList(gradeOptionListAdapter.getGradeHashMap());
 
             DB.addResult(courseId, result)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +33,10 @@ import com.mrgreenapps.coursemanagementsystem.model.UserInfo;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,6 +67,9 @@ public class ResultFragment extends Fragment {
 
     @BindView(R.id.generate_button)
     Button generateButton;
+
+    @BindView(R.id.publish_button)
+    ToggleButton publishButton;
 
     TableAdapter tableAdapter;
 
@@ -106,6 +115,7 @@ public class ResultFragment extends Fragment {
                                     notGeneratedArea.setVisibility(View.VISIBLE);
                                     notPublishedArea.setVisibility(View.GONE);
                                 }
+                                publishButton.setVisibility(View.VISIBLE);
                             } else if(userType.equals(UserInfo.TYPE_STUDENT)){
                                 if(course.isResultPublished()){
                                     resultArea.setVisibility(View.VISIBLE);
@@ -117,7 +127,16 @@ public class ResultFragment extends Fragment {
                                     notGeneratedArea.setVisibility(View.GONE);
                                     notPublishedArea.setVisibility(View.VISIBLE);
                                 }
+                                publishButton.setVisibility(View.GONE);
                             }
+
+                            publishButton.setChecked(!course.isResultPublished());
+                            publishButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    DB.publishResult(courseId, !isChecked);
+                                }
+                            });
 
                         }
 
@@ -154,6 +173,10 @@ public class ResultFragment extends Fragment {
                             }
                         }
 
+                        columnHeaderList.add("Total");
+                        columnHeaderList.add("Grade");
+
+
                         DB.getResult(courseId)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
@@ -164,10 +187,26 @@ public class ResultFragment extends Fragment {
 
                                         if (result != null) {
 
+
+                                            //set grade
+                                            HashMap<Float, String> newGradeList = new HashMap<>();
+                                            for(String lowerBoundString: result.getGradeList().keySet()){
+                                                newGradeList.put(Float.parseFloat(lowerBoundString), result.getGradeList().get(lowerBoundString));
+                                            }
+
+                                            List<Float> lowerBoundList = new ArrayList<>();
+                                            for(Float lowerBound: newGradeList.keySet()){
+                                                lowerBoundList.add(lowerBound);
+                                            }
+
+                                            Collections.sort(lowerBoundList, Collections.reverseOrder());
+
+
                                             int counter = 0;
                                                 for (String studentIid : result.getStudentsName().keySet()) {
                                                     counter++;
                                                     List<String> tempList = new ArrayList<>();
+                                                    float totalMark = 0;
 
                                                     tempList.add(
                                                             result.getStudentsName().get(studentIid) == null ?
@@ -184,18 +223,29 @@ public class ResultFragment extends Fragment {
                                                                     "0.00" : String.valueOf(formatter.format(result.getAttendanceMark().get(studentIid)))
                                                     );
 
+                                                    if(result.getAttendanceMark().get(studentIid) != null) totalMark += result.getAttendanceMark().get(studentIid);
+
 
                                                     tempList.add(
                                                             result.getTutorialMark().get(studentIid) == null ?
                                                                     "0.00" : String.valueOf(formatter.format(result.getTutorialMark().get(studentIid)))
                                                     );
 
+                                                    if(result.getTutorialMark().get(studentIid) != null) totalMark += result.getTutorialMark().get(studentIid);
+
+
                                                     for(String examId: examIdList){
                                                         tempList.add(
                                                                 result.getExamMarkList().get(examId) == null ?
-                                                                        "0.00" : String.valueOf(formatter.format(result.getTutorialMark().get(studentIid)))
+                                                                        "0.00" : String.valueOf(formatter.format(result.getExamMarkList().get(examId).get(studentIid)))
                                                         );
+
+                                                        if(result.getExamMarkList().get(examId) != null) totalMark += result.getExamMarkList().get(examId).get(studentIid);
+
                                                     }
+
+                                                    tempList.add(formatter.format(totalMark));
+                                                    tempList.add(getGrade(newGradeList, lowerBoundList, totalMark));
 
                                                     rowHeaderList.add(String.valueOf(counter));
                                                     cellList.add(tempList);
@@ -228,129 +278,6 @@ public class ResultFragment extends Fragment {
                 });
     }
 
-//    private void showResultData(){
-//        DB.getResult(courseId)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        Result result = documentSnapshot.toObject(Result.class);
-//
-//                        if(result !=  null){
-//
-//
-//                            DataTableHeader.Builder dataTableHeaderBuilder = new DataTableHeader.Builder();
-//
-//                            dataTableHeaderBuilder.item("Name", 1);
-//                            dataTableHeaderBuilder.item("Id", 1);
-//                            dataTableHeaderBuilder.item("Attendance", 1);
-//                            dataTableHeaderBuilder.item("Tutorial", 1);
-//
-//                            DB.getExamListQuery(courseId)
-//                                    .get()
-//                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                        @Override
-//                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                            List<String> examIdList = new ArrayList<>();
-//                                            for(DocumentSnapshot dc: queryDocumentSnapshots.getDocuments()){
-//                                                Exam exam = dc.toObject(Exam.class);
-//                                                if(exam != null){
-//                                                    dataTableHeaderBuilder.item(exam.getName(), 1);
-//                                                    examIdList.add(dc.getId());
-//                                                }
-//
-//                                            }
-//
-//                                            ArrayList<DataTableRow> rows = new ArrayList<>();
-//
-//                                            DB.getResult(courseId)
-//                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                                        @Override
-//                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                                            Result result = documentSnapshot.toObject(Result.class);
-//                                                            if(result != null){
-//
-//                                                                DB.getCSRelationCourseQuery(courseId)
-//                                                                        .get()
-//                                                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                                                            @Override
-//                                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//
-//                                                                                for(DocumentSnapshot dc: queryDocumentSnapshots.getDocuments()){
-//                                                                                    CSRelation csRelation = dc.toObject(CSRelation.class);
-//                                                                                    if(csRelation != null){
-//                                                                                        DataTableRow.Builder rowBuilder = new DataTableRow.Builder();
-//
-//                                                                                                rowBuilder
-//                                                                                                .value(csRelation.getStudentId())
-//                                                                                                .value(
-//                                                                                                        result.getAttendanceMark().get(csRelation.getStudentId()) != null ?
-//                                                                                                                result.getAttendanceMark().get(csRelation.getStudentId()).toString() :
-//                                                                                                                "0"
-//                                                                                                )
-//                                                                                                .value(
-//                                                                                                        result.getTutorialMark().get(csRelation.getStudentId()) != null ?
-//                                                                                                                result.getTutorialMark().get(csRelation.getStudentId()).toString() :
-//                                                                                                                "0"
-//                                                                                                );
-//
-//                                                                                                for(String examId: examIdList){
-//                                                                                                    rowBuilder.value(
-//                                                                                                            result.getExamMarkList().get(examId).get(csRelation.getStudentId()) != null ?
-//                                                                                                                    result.getExamMarkList().get(examId).get(csRelation.getStudentId()).toString() :
-//                                                                                                                    "0"
-//                                                                                                    );
-//                                                                                                }
-//
-//                                                                                                rows.add(rowBuilder.build());
-//
-//
-//
-//                                                                                    }
-//                                                                                }
-//
-//
-//
-//
-//                                                                                dataTable.setHeader(dataTableHeaderBuilder.build());
-//                                                                                dataTable.setRows(rows);
-//
-//                                                                                dataTable.inflate(getContext());
-//
-//                                                                            }
-//                                                                        });
-//
-//
-//
-//
-//
-//
-//                                                            }
-//                                                        }
-//                                                    });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//                                        }
-//                                    });
-//
-//
-//
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 
     class TableListener implements ITableViewListener{
 
@@ -383,6 +310,16 @@ public class ResultFragment extends Fragment {
         public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
 
         }
+    }
+
+    private String getGrade(HashMap<Float, String> gradeMap, List<Float> lowerBoundSortedList, float totalMark){
+        for(int i = 0; i < lowerBoundSortedList.size(); i++){
+            if(totalMark > lowerBoundSortedList.get(i)){
+                return gradeMap.get(lowerBoundSortedList.get(i));
+            }
+        }
+
+        return "F";
     }
 
 }

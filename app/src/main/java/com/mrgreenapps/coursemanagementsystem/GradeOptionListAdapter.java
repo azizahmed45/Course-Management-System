@@ -4,15 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class GradeOptionListAdapter extends RecyclerView.Adapter<GradeOptionListAdapter.GradeOptionViewHolder> {
@@ -32,9 +34,11 @@ public class GradeOptionListAdapter extends RecyclerView.Adapter<GradeOptionList
 
     boolean defaultGrade = true;
 
+    Context context;
+
 
     public GradeOptionListAdapter(Context context) {
-
+        this.context = context;
 
         defaultGdeLetters.addAll(Arrays.asList(context.getResources().getStringArray(R.array.grade_letters)));
         defaultGradeLowerBounds.addAll(Arrays.asList(context.getResources().getStringArray(R.array.grade_lower_bounds)));
@@ -100,6 +104,24 @@ public class GradeOptionListAdapter extends RecyclerView.Adapter<GradeOptionList
         customGdeLetters.add(letter);
         customGradeLowerBounds.add(lowerBound);
         setCustomGradeList();
+    }
+
+    public HashMap<String, String> getGradeHashMap(){
+        HashMap<String, String> grades = new HashMap<>();
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        try{
+            for(int i = 0; i < gradeLetters.size(); i++){
+                grades.put(gradeLowerBounds.get(i), gradeLetters.get(i));
+            }
+        } catch (Exception e){
+            if(e instanceof NumberFormatException){
+                Toast.makeText(context, "Lower bound should be number", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Something went wrong please restart the app.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return grades;
     }
 
     public List<String> getGradeLetters(){

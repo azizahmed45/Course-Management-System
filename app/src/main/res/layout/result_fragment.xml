@@ -58,13 +58,25 @@
         android:id="@+id/result_area"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <com.evrencoskun.tableview.TableView
             android:id="@+id/tableView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:selected_color="@color/colorAccent" />
+
+        <ToggleButton
+            android:id="@+id/publish_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/true_false_state"
+            android:textColor="@color/white"
+            android:textOn="Publish"
+            android:textOff="Un Publish"/>
 
     </LinearLayout>
 
