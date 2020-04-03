@@ -48,4 +48,7 @@ dependencies {
     //table view
     implementation 'com.evrencoskun.library:tableview:0.8.9'
 
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation "com.github.SUPERCILEX.poi-android:poi:3.17"
+
 }
