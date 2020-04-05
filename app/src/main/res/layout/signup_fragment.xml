@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
-    android:padding="16dp"
     android:orientation="vertical">
 
     <ImageView
@@ -18,46 +17,50 @@
 
     <EditText
         android:id="@+id/email_field"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_edit_text_bg"
+        android:background="@drawable/username_field_bg"
+        android:paddingLeft="70dp"
+        android:paddingRight="10dp"
         android:layout_marginVertical="4dp"
-        android:padding="10dp"
         android:hint="Email"
         android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/password_field"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_edit_text_bg"
+        android:background="@drawable/password_field_bg"
+        android:paddingLeft="70dp"
+        android:paddingRight="10dp"
         android:layout_marginVertical="4dp"
-        android:padding="10dp"
         android:hint="Password"
         android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/password_verify_field"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_edit_text_bg"
+        android:background="@drawable/password_field_bg"
+        android:paddingLeft="70dp"
+        android:paddingRight="10dp"
         android:layout_marginVertical="4dp"
-        android:padding="10dp"
         android:hint="Verify Password"
         android:inputType="textPassword"/>
 
     <Spinner
         android:id="@+id/account_type_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_edit_text_bg"
+        android:background="@drawable/user_type_dropdown_bg"
         android:layout_marginVertical="4dp"
-        android:padding="10dp"
+        android:paddingLeft="70dp"
+        android:paddingRight="10dp"
         android:entries="@array/account_type"/>
 
     <Button
         android:id="@+id/sign_up_button"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:background="@drawable/main_button_bg"

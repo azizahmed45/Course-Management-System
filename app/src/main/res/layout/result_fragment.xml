@@ -67,16 +67,35 @@
             android:layout_height="wrap_content"
             app:selected_color="@color/colorAccent" />
 
-        <ToggleButton
-            android:id="@+id/publish_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="5dp"
-            android:background="@drawable/true_false_state"
-            android:textColor="@color/white"
-            android:textOn="Publish"
-            android:textOff="Un Publish"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/publish_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/true_false_state"
+                android:textColor="@color/white"
+                android:textOn="Publish"
+                android:textOff="Un Publish"/>
+
+            <Button
+                android:id="@+id/export_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/main_button_bg"
+                android:text="Export"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

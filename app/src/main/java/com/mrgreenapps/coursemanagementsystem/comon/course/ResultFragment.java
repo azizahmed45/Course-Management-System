@@ -85,6 +85,9 @@ public class ResultFragment extends Fragment {
     @BindView(R.id.publish_button)
     ToggleButton publishButton;
 
+    @BindView(R.id.export_button)
+    Button exportButton;
+
     TableAdapter tableAdapter;
 
 
@@ -136,6 +139,7 @@ public class ResultFragment extends Fragment {
                                     notPublishedArea.setVisibility(View.GONE);
                                 }
                                 publishButton.setVisibility(View.VISIBLE);
+                                exportButton.setVisibility(View.VISIBLE);
                             } else if (userType.equals(UserInfo.TYPE_STUDENT)) {
                                 if (course.isResultPublished()) {
                                     resultArea.setVisibility(View.VISIBLE);
@@ -148,6 +152,7 @@ public class ResultFragment extends Fragment {
                                     notPublishedArea.setVisibility(View.VISIBLE);
                                 }
                                 publishButton.setVisibility(View.GONE);
+                                exportButton.setVisibility(View.GONE);
                             }
 
                             publishButton.setChecked(!course.isResultPublished());
@@ -162,6 +167,13 @@ public class ResultFragment extends Fragment {
 
                     }
                 });
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportResult(columnHeaderList, cellList);
+            }
+        });
 
         return view;
     }
@@ -330,7 +342,7 @@ public class ResultFragment extends Fragment {
 
     private String getGrade(HashMap<Float, String> gradeMap, List<Float> lowerBoundSortedList, float totalMark) {
         for (int i = 0; i < lowerBoundSortedList.size(); i++) {
-            if (totalMark > lowerBoundSortedList.get(i)) {
+            if (totalMark >= lowerBoundSortedList.get(i)) {
                 return gradeMap.get(lowerBoundSortedList.get(i));
             }
         }
@@ -338,9 +350,9 @@ public class ResultFragment extends Fragment {
         return "F";
     }
 
-    private void exportResult(List<String> columnHeaderList, List<List<String>> cellList){
+    private void exportResult(List<String> columnHeaderList, List<List<String>> cellList) {
 
-        if(getContext() == null) return;
+        if (getContext() == null) return;
         File file = new File(getContext().getFilesDir(), "Result.xlsx");
 
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -350,7 +362,7 @@ public class ResultFragment extends Fragment {
 
         int rowCount = 0;
         XSSFRow firstRow = sheet.createRow(rowCount++);
-        for(int i = 0; i < columnHeaderList.size(); i++){
+        for (int i = 0; i < columnHeaderList.size(); i++) {
             Cell cell = firstRow.createCell(i);
             cell.setCellValue(columnHeaderList.get(i));
         }
@@ -384,8 +396,6 @@ public class ResultFragment extends Fragment {
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
 
-
-
         // generate URI, I defined authority as the application ID in the Manifest, the last param is file I want to open
         Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", file);
 
@@ -402,7 +412,6 @@ public class ResultFragment extends Fragment {
         startActivity(Intent.createChooser(intent, "Share File"));
 
     }
-
 
 
 }
