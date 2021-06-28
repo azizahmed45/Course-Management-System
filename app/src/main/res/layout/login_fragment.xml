@@ -12,8 +12,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="8dp"
-        android:tint="@color/blue"
-        android:src="@drawable/ic_ju"/>
+        android:src="@drawable/pau_logo"/>
 
     <EditText
         android:id="@+id/email_field"

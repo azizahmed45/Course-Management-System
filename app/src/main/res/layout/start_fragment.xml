@@ -8,14 +8,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@drawable/ic_ju"
-        android:tint="@color/blue" />
+        android:src="@drawable/pau_logo"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Course Management System"
-        android:textColor="@color/blue"
+        android:textColor="@color/red"
         android:textSize="25sp"/>
 
 </LinearLayout>
